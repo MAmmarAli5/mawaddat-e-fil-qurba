@@ -449,3 +449,90 @@ footer p{
     color:#555;
 }
 }
+/* ================= LOGIN PAGE ================= */
+
+.login-box{
+
+width:90%;
+
+max-width:500px;
+
+margin:80px auto;
+
+background:white;
+
+padding:40px;
+
+border-radius:20px;
+
+box-shadow:0 10px 25px rgba(0,0,0,.12);
+
+text-align:center;
+
+border-top:5px solid #147D64;
+
+}
+
+.login-box h1{
+
+color:#0F4C4C;
+
+margin-bottom:15px;
+
+}
+
+.login-box p{
+
+margin-bottom:25px;
+
+color:#666;
+
+}
+
+.login-box input,
+
+.login-box select{
+
+width:100%;
+
+padding:15px;
+
+margin:12px 0;
+
+border:1px solid #ccc;
+
+border-radius:10px;
+
+font-size:16px;
+
+}
+
+.login-box button{
+
+width:100%;
+
+padding:15px;
+
+background:#147D64;
+
+color:white;
+
+border:none;
+
+border-radius:10px;
+
+font-size:17px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.login-box button:hover{
+
+background:#5C1A1A;
+
+}
