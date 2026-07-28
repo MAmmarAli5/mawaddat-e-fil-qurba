@@ -428,5 +428,24 @@ footer p{
     width:60px;
     height:60px;
 }
+.about{
+    padding:80px 20px;
+    background:#ffffff;
+}
 
+.about h2{
+    text-align:center;
+    color:#5C1A1A;
+    margin-bottom:20px;
+    font-size:40px;
+}
+
+.about p{
+    max-width:900px;
+    margin:auto;
+    text-align:center;
+    font-size:18px;
+    line-height:1.9;
+    color:#555;
+}
 }
