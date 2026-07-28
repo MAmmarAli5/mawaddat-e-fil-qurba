@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Student Registration</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="login-box">
+
+<h1>معرفتِ معصومین Online Exam</h1>
+
+<p>براہ کرم اپنی معلومات درج کریں</p>
+
+
+<input 
+type="text" 
+id="student-name" 
+placeholder="طالب علم کا نام">
+
+
+<input 
+type="text" 
+id="student-id" 
+placeholder="Student ID / Roll Number">
+
+
+<button onclick="startExam()">
+Start Test
+</button>
+
+
+</div>
+
+
+
+<script>
+
+function startExam(){
+
+let name = document.getElementById("student-name").value;
+
+let id = document.getElementById("student-id").value;
+
+
+if(name=="" || id==""){
+
+alert("براہ کرم نام اور ID درج کریں");
+
+return;
+
+}
+
+
+// معلومات محفوظ کرنا
+
+localStorage.setItem("studentName", name);
+localStorage.setItem("studentID", id);
+
+
+// Exam page پر جانا
+
+window.location.href="exam.html";
+
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
