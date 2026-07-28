@@ -1,88 +1,114 @@
 const quizContainer = document.getElementById("quiz-container");
 const submitBtn = document.getElementById("submit-btn");
-const studentName = document.getElementById("student-name");
 const resultBox = document.getElementById("result");
 
 
-// Questions load کرنا
-function loadQuestions() {
+// سوالات دکھانے کا فنکشن
 
-    questions.forEach((q, index) => {
+function loadQuestions(){
 
-        let questionHTML = `
-        <div class="question-box">
+    questions.forEach((q,index)=>{
 
-            <h3>${q.question}</h3>
+        let html = `
 
-            <label>
-            <input type="radio" name="q${index}" value="${q.options[0]}">
-            ${q.options[0]}
-            </label>
+        <div class="question">
 
-            <label>
-            <input type="radio" name="q${index}" value="${q.options[1]}">
-            ${q.options[1]}
-            </label>
+        <h3>
+        ${index + 1}. ${q.question}
+        </h3>
 
-            <label>
-            <input type="radio" name="q${index}" value="${q.options[2]}">
-            ${q.options[2]}
-            </label>
 
-            <label>
-            <input type="radio" name="q${index}" value="${q.options[3]}">
-            ${q.options[3]}
-            </label>
+        <label>
+        <input type="radio" name="q${index}" value="${q.options[0]}">
+        ${q.options[0]}
+        </label>
+        <br>
+
+
+        <label>
+        <input type="radio" name="q${index}" value="${q.options[1]}">
+        ${q.options[1]}
+        </label>
+        <br>
+
+
+        <label>
+        <input type="radio" name="q${index}" value="${q.options[2]}">
+        ${q.options[2]}
+        </label>
+        <br>
+
+
+        <label>
+        <input type="radio" name="q${index}" value="${q.options[3]}">
+        ${q.options[3]}
+        </label>
+
 
         </div>
+
         `;
 
-        quizContainer.innerHTML += questionHTML;
+
+        quizContainer.innerHTML += html;
+
 
     });
+
 
 }
 
 
-// Result check کرنا
-submitBtn.addEventListener("click", function(){
 
-    let score = 0;
+// Result check
 
-    questions.forEach((q,index)=>{
-
-        let selected = document.querySelector(
-            `input[name="q${index}"]:checked`
-        );
+submitBtn.addEventListener("click",()=>{
 
 
-        if(selected && selected.value === q.answer){
-
-            score++;
-
-        }
-
-    });
+let score = 0;
 
 
-    let percentage = (score / questions.length) * 100;
+questions.forEach((q,index)=>{
 
 
-    resultBox.innerHTML = `
+let answer = document.querySelector(
+`input[name="q${index}"]:checked`
+);
 
-    <h2>Result</h2>
 
-    <p>Student Name: ${studentName.value}</p>
+if(answer && answer.value === q.answer){
 
-    <p>Total Marks: ${score} / 60</p>
+score++;
 
-    <p>Percentage: ${percentage.toFixed(2)}%</p>
-
-    `;
+}
 
 
 });
 
 
-// Start Quiz
+let percentage = (score/questions.length)*100;
+
+
+let name = localStorage.getItem("studentName");
+
+
+resultBox.innerHTML = `
+
+<h2>Result</h2>
+
+<p>Student Name: ${name}</p>
+
+<p>Total Marks: ${score} / ${questions.length}</p>
+
+<p>Percentage: ${percentage.toFixed(2)}%</p>
+
+`;
+
+
+});
+
+
+
+// Start
+
 loadQuestions();
