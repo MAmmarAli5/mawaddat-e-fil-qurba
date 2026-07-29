@@ -1,3 +1,25 @@
+// Firebase SDK
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getDatabase,
+  ref,
+  push
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyB3FCQ0PFQaQDwdjIvvVd3shQ_EXqL3iMA",
+  authDomain: "mawaddat-fil-qurba.firebaseapp.com",
+  databaseURL: "https://mawaddat-fil-qurba-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "mawaddat-fil-qurba",
+  storageBucket: "mawaddat-fil-qurba.firebasestorage.app",
+  messagingSenderId: "637175775327",
+  appId: "1:637175775327:web:95da7d655c7606f5ef9bea"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
 const quizContainer = document.getElementById("quiz-container");
 const submitBtn = document.getElementById("submit-btn");
 const resultBox = document.getElementById("result");
