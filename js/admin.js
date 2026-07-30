@@ -43,13 +43,20 @@ search.addEventListener("keyup", () => {
     }
 
 });
+let topperName = "";
+let topperScore = -1;
+let topperTotal = 0;
 onValue(resultsRef, (snapshot) => {
     table.innerHTML = "";
 
     snapshot.forEach((childSnapshot) => {
 
         const data = childSnapshot.val();
-
+if (data.score > topperScore) {
+    topperScore = data.score;
+    topperTotal = data.total;
+    topperName = data.studentName;
+}
         table.innerHTML += `
             <tr>
                 <td>${data.studentName}</td>
