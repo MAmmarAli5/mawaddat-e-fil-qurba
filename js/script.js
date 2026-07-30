@@ -21,7 +21,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 const quizContainer = document.getElementById("quiz-container");
-const submitBtn = document.getElementById("submit-btn");
+const submitBtn = document.getElementById("submitBtn");
 const resultBox = document.getElementById("result");
 
 
@@ -126,11 +126,21 @@ resultBox.innerHTML = `
 
 `;
 
+const examRef = ref(db, "results");
+
+push(examRef, {
+
+    studentName: name,
+
+    score: score,
+
+    total: questions.length,
+
+    percentage: percentage.toFixed(2),
+
+    date: new Date().toLocaleString()
 
 });
-
-
-
 // Start
 
 loadQuestions();
