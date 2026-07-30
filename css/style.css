@@ -354,7 +354,19 @@ section{
 ========================================== */
 
 .courses{
-    background:#F3EFE7;
+
+    background:
+    linear-gradient(rgba(15,76,76,.80), rgba(15,76,76,.80)),
+    url("../images/banner.jpg");
+
+    background-size:cover;
+
+    background-position:center;
+
+    background-repeat:no-repeat;
+
+    padding:80px 20px;
+
 }
 
 .courses h2{
