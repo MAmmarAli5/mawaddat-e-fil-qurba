@@ -17,53 +17,21 @@
 
 <div class="login-box">
 
-<h1>Student Login</h1>
-
-<p>Please enter your details to start the examination.</p>
-
-<form action="exam.html">
+<h1>Start Exam</h1>
 
 <input
 type="text"
-placeholder="Student Full Name"
-required>
+id="studentName"
+placeholder="Student Name">
 
 <input
 type="text"
-placeholder="Roll Number (Optional)">
-
-<select required>
-
-<option value="">Select Batch</option>
-
-<option>Batch 2026</option>
-
-</select>
-
-<select required>
-
-<option value="">Select Course</option>
-
-<option>معرفتِ معصومین</option>
-
-<option>معرفتِ قرآن</option>
-
-<option>معرفتِ عقیدہ</option>
-
-<option>معرفتِ فقہ</option>
-
-<option>معرفتِ احادیث</option>
-
-<option>تفسیر القرآن</option>
-
-</select>
+id="studentId"
+placeholder="Student ID">
 
 <button onclick="startExam()">
-Start Test
+Start Exam
 </button>
-
-</form>
-
 </div>
 <script>
 function startExam() {
