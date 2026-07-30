@@ -370,12 +370,12 @@ section{
 }
 
 .courses h2{
-    text-align:center;
-    font-size:42px;
-    color:#6B1E1E;
-    margin-bottom:55px;
+    color:#ffffff;
 }
 
+.card{
+    background:rgba(255,255,255,0.95);
+}
 .course-container{
 
     display:grid;
