@@ -129,18 +129,14 @@ resultBox.innerHTML = `
 const examRef = ref(db, "results");
 
 push(examRef, {
-
     studentName: name,
-
     score: score,
-
     total: questions.length,
-
     percentage: percentage.toFixed(2),
-
     date: new Date().toLocaleString()
-
 });
-// Start
 
+});   // ← یہ addEventListener کا Closing ہے
+
+// Start
 loadQuestions();
