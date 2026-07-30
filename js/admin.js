@@ -23,10 +23,6 @@ const db = getDatabase(app);
 const table = document.getElementById("resultsTable");
 
 const resultsRef = ref(db, "results");
-
-onValue(resultsRef, (snapshot) => {
-const search = document.getElementById("search");
-
 search.addEventListener("keyup", () => {
 
     let filter = search.value.toLowerCase();
@@ -41,17 +37,13 @@ search.addEventListener("keyup", () => {
 
             let text = firstCol.textContent.toLowerCase();
 
-            if (text.indexOf(filter) > -1) {
-                rows[i].style.display = "";
-            } else {
-                rows[i].style.display = "none";
-            }
-
+            rows[i].style.display =
+                text.includes(filter) ? "" : "none";
         }
-
     }
 
 });
+onValue(resultsRef, (snapshot) => {
     table.innerHTML = "";
 
     snapshot.forEach((childSnapshot) => {
