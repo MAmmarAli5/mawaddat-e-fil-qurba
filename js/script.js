@@ -97,15 +97,17 @@ let answer = document.querySelector(
 `input[name="q${index}"]:checked`
 );
 
+if(answer){
 
-if(answer && answer.value === q.answer){
+let selectedIndex = q.options.indexOf(answer.value);
+
+if(selectedIndex === q.answer){
 
 score++;
 
 }
 
-
-});
+}
 
 
 let percentage = (score/questions.length)*100;
