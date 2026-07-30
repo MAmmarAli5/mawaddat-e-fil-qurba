@@ -552,6 +552,6 @@ const questions = [
     answer: 1
   }
 ];
-
+window.questions = questions;
 // اگر آپ ES Modules استعمال کر رہے ہیں (ان بلاک کو ضرورت کے مطابق ان کمنٹ کریں):
 // export default questions;
