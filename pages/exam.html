@@ -27,7 +27,7 @@
 </div>
 
 
-<button id="submit-btn">
+<button id="submitBtn">
 Submit Exam
 </button>
 
@@ -45,8 +45,12 @@ Submit Exam
 
 <script>
 
-document.getElementById("display-name").innerHTML =
-"طالب علم: " + localStorage.getItem("studentName");
+const studentName = localStorage.getItem("studentName");
+
+if(studentName){
+    document.getElementById("display-name").innerHTML =
+    "طالب علم: " + studentName;
+}
 
 
 </script>
