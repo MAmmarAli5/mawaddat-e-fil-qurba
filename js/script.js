@@ -21,7 +21,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 const quizContainer = document.getElementById("quiz-container");
-const submitBtn = document.getElementById("submitBtn");
+const submitBtn = document.getElementById("submit-btn");
 const resultBox = document.getElementById("result");
 
 
