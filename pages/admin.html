@@ -1,1 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Results</title>
 
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>📊 Exam Results</h1>
+
+    <input
+        type="text"
+        id="search"
+        placeholder="Search Student..."
+    >
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Marks</th>
+                <th>Percentage</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+
+        <tbody id="resultsTable">
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<script type="module" src="../js/admin.js"></script>
+
+</body>
+</html>
