@@ -25,7 +25,33 @@ const table = document.getElementById("resultsTable");
 const resultsRef = ref(db, "results");
 
 onValue(resultsRef, (snapshot) => {
+const search = document.getElementById("search");
 
+search.addEventListener("keyup", () => {
+
+    let filter = search.value.toLowerCase();
+
+    let rows = table.getElementsByTagName("tr");
+
+    for (let i = 0; i < rows.length; i++) {
+
+        let firstCol = rows[i].getElementsByTagName("td")[0];
+
+        if (firstCol) {
+
+            let text = firstCol.textContent.toLowerCase();
+
+            if (text.indexOf(filter) > -1) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+
+        }
+
+    }
+
+});
     table.innerHTML = "";
 
     snapshot.forEach((childSnapshot) => {
