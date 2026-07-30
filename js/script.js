@@ -136,7 +136,7 @@ push(examRef, {
     date: new Date().toLocaleString()
 });
 
-});   // ← یہ addEventListener کا Closing ہے
+}); // ← یہ addEventListener کو بند کرے گا
 
 // Start
 loadQuestions();
