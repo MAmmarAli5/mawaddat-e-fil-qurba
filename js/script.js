@@ -83,62 +83,47 @@ function loadQuestions(){
 
 
 // Result check
+submitBtn.addEventListener("click", () => {
 
-submitBtn.addEventListener("click",()=>{
+    let score = 0;
 
+    questions.forEach((q, index) => {
 
-let score = 0;
+        let answer = document.querySelector(
+            `input[name="q${index}"]:checked`
+        );
 
+        if (answer) {
 
-questions.forEach((q,index)=>{
+            let selectedIndex = q.options.indexOf(answer.value);
 
+            if (selectedIndex === q.answer) {
+                score++;
+            }
 
-let answer = document.querySelector(
-`input[name="q${index}"]:checked`
-);
+        }
 
-if(answer){
+    }); // ← صرف forEach یہاں ختم ہوگی
 
-let selectedIndex = q.options.indexOf(answer.value);
+    let percentage = (score / questions.length) * 100;
 
-if(selectedIndex === q.answer){
+    let name = localStorage.getItem("studentName");
 
-score++;
+    resultBox.innerHTML = `
+        <h2>Result</h2>
+        <p>Student Name: ${name}</p>
+        <p>Total Marks: ${score} / ${questions.length}</p>
+        <p>Percentage: ${percentage.toFixed(2)}%</p>
+    `;
 
-}
+    const examRef = ref(db, "results");
 
-}
+    push(examRef, {
+        studentName: name,
+        score: score,
+        total: questions.length,
+        percentage: percentage.toFixed(2),
+        date: new Date().toLocaleString()
+    });
 
-
-let percentage = (score/questions.length)*100;
-
-
-let name = localStorage.getItem("studentName");
-
-
-resultBox.innerHTML = `
-
-<h2>Result</h2>
-
-<p>Student Name: ${name}</p>
-
-<p>Total Marks: ${score} / ${questions.length}</p>
-
-<p>Percentage: ${percentage.toFixed(2)}%</p>
-
-`;
-
-const examRef = ref(db, "results");
-
-push(examRef, {
-    studentName: name,
-    score: score,
-    total: questions.length,
-    percentage: percentage.toFixed(2),
-    date: new Date().toLocaleString()
 });
-
-}); // ← یہ addEventListener کو بند کرے گا
-
-// Start
-loadQuestions();
