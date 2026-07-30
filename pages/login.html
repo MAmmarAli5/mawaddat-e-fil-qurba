@@ -68,21 +68,19 @@ Start Test
 <script>
 function startExam() {
 
-let name = document.getElementById("student-name").value;
-let id = document.getElementById("student-id").value;
+    const name = document.getElementById("studentName").value.trim();
+    const id = document.getElementById("studentId").value.trim();
 
-if(name==="" || id===""){
-    alert("براہ کرم نام اور Student ID درج کریں");
-    return;
-}
+    if (name === "" || id === "") {
+        alert("براہ کرم Student Name اور Student ID درج کریں۔");
+        return;
+    }
 
-localStorage.setItem("studentName", name);
-localStorage.setItem("studentID", id);
+    localStorage.setItem("studentName", name);
+    localStorage.setItem("studentId", id);
 
-window.location.href="exam.html";
-
+    window.location.href = "exam.html";
 }
 </script>
 </body>
-
 </html>
