@@ -8,9 +8,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import {
   getDatabase,
   ref,
-  onValue
+  onValue,
+  remove
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
 // Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyB3FCQ0PFQaQDwdjIvvVd3shQ_EXqL3iMA",
@@ -51,6 +51,8 @@ search.addEventListener("keyup", () => {
 let topperName = "";
 let topperScore = -1;
 let topperTotal = 0;
+let totalStudents = 0;
+let totalScore = 0;
 onValue(resultsRef, (snapshot) => {
 
     table.innerHTML = "";
@@ -60,9 +62,13 @@ onValue(resultsRef, (snapshot) => {
     let topperTotal = 0;
 
     snapshot.forEach((childSnapshot) => {
-
+        totalStudents++;
+        totalScore += data.score;
         const data = childSnapshot.val();
-
+document.getElementById("totalStudents").innerHTML = totalStudents;
+document.getElementById("highestMarks").innerHTML = `${topperScore} / ${topperTotal}`;
+let average = (totalScore / totalStudents).toFixed(2);
+document.getElementById("averageMarks").innerHTML = average;
         if (data.score > topperScore) {
             topperScore = data.score;
             topperTotal = data.total;
