@@ -130,3 +130,24 @@ submitBtn.addEventListener("click", () => {
 
 // Start
 loadQuestions();
+let warningCount = 0;
+
+document.addEventListener("visibilitychange", () => {
+
+    if (document.hidden) {
+
+        warningCount++;
+
+        alert("Warning! You left the exam page.");
+
+        if (warningCount >= 3) {
+
+            alert("Exam has been submitted due to cheating.");
+
+            submitBtn.click();
+
+        }
+
+    }
+
+});
