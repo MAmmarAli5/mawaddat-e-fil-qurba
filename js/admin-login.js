@@ -2,18 +2,25 @@ const loginBtn = document.getElementById("loginBtn");
 
 loginBtn.addEventListener("click", () => {
 
+    const username = document.getElementById("username").value;
+
     const password = document.getElementById("password").value;
 
-    if (password === "Mawaddat2026") {
+    if (
+        username === "admin"
+        &&
+        password === "123456"
+    ){
 
-        localStorage.setItem("adminLoggedIn", "true");
+        localStorage.setItem("adminLoggedIn","true");
 
-        window.location.href = "admin.html";
+        window.location.href="admin.html";
 
-    } else {
+    }
 
-        document.getElementById("error").innerHTML =
-            "Wrong Password";
+    else{
+
+        alert("Wrong Username or Password");
 
     }
 
