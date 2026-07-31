@@ -76,12 +76,18 @@ document.getElementById("averageMarks").innerHTML = average;
         }
 
         table.innerHTML += `
-            <tr>
-                <td>${data.studentName}</td>
-                <td>${data.score} / ${data.total}</td>
-                <td>${data.percentage}%</td>
-                <td>${data.date}</td>
-            </tr>
+<tr>
+    <td>${data.studentName}</td>
+    <td>${data.score} / ${data.total}</td>
+    <td>${data.percentage}%</td>
+    <td>${data.date}</td>
+    <td>
+        <button onclick="deleteResult('${childSnapshot.key}')">
+            Delete
+        </button>
+    </td>
+</tr>
+`;
         `;
 
     });
