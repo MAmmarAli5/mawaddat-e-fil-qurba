@@ -123,7 +123,8 @@ submitBtn.addEventListener("click", () => {
     score: score,
     total: questions.length,
     percentage: percentage.toFixed(2),
-    date: new Date().toLocaleString()
+    date: new Date().toLocaleString(),
+     submittedAt: Date.now()
 });
 
 });
