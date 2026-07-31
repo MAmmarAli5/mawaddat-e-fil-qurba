@@ -210,3 +210,106 @@ search.addEventListener("keyup", () => {
     }
 
 });
+// ===============================
+// DELETE RESULT
+// ===============================
+
+window.deleteResult = function(id) {
+
+    const confirmDelete = confirm(
+        "Are you sure you want to delete this student's result?"
+    );
+
+    if (!confirmDelete) return;
+
+    remove(ref(db, "results/" + id))
+        .then(() => {
+
+            alert("Result Deleted Successfully.");
+
+        })
+        .catch((error) => {
+
+            alert("Error : " + error.message);
+
+        });
+
+};
+
+// ===============================
+// PUBLISH RESULTS
+// ===============================
+
+publishBtn.addEventListener("click", async () => {
+
+    try {
+
+        await set(settingsRef, true);
+
+        alert("Results Published Successfully.");
+
+    }
+    catch (error) {
+
+        alert(error.message);
+
+    }
+
+});
+
+// ===============================
+// LOGOUT
+// ===============================
+
+logoutBtn.addEventListener("click", () => {
+
+    const logout = confirm("Do you want to Logout?");
+
+    if (!logout) return;
+
+    localStorage.removeItem("adminLoggedIn");
+
+    window.location.href = "admin-login.html";
+
+});
+// ===============================
+// CHECK RESULT STATUS
+// ===============================
+
+onValue(settingsRef, (snapshot) => {
+
+    if (snapshot.exists()) {
+
+        const published = snapshot.val();
+
+        if (published) {
+
+            publishBtn.innerHTML = "✅ Results Published";
+            publishBtn.disabled = true;
+
+        } else {
+
+            publishBtn.innerHTML = "Publish Results";
+            publishBtn.disabled = false;
+
+        }
+
+    }
+
+});
+
+// ===============================
+// AUTO REFRESH TABLE
+// ===============================
+
+setInterval(() => {
+
+    onValue(resultsRef, () => {});
+
+}, 10000);
+
+// ===============================
+// CONSOLE MESSAGE
+// ===============================
+
+console.log("✅ Admin Panel Loaded Successfully");
