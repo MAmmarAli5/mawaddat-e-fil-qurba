@@ -127,7 +127,39 @@ submitBtn.addEventListener("click", () => {
 });
 
 });
+// ===== Exam Timer =====
 
+let totalTime = 4 * 60 * 60 + 45 * 60; // 4h 45m
+
+const timer = document.getElementById("timer");
+
+const examTimer = setInterval(() => {
+
+    let hours = Math.floor(totalTime / 3600);
+
+    let minutes = Math.floor((totalTime % 3600) / 60);
+
+    let seconds = totalTime % 60;
+
+    timer.innerHTML =
+    `⏳ Time Left :
+    ${String(hours).padStart(2,'0')} :
+    ${String(minutes).padStart(2,'0')} :
+    ${String(seconds).padStart(2,'0')}`;
+
+    totalTime--;
+
+    if(totalTime < 0){
+
+        clearInterval(examTimer);
+
+        alert("Time is over! Exam Submitted.");
+
+        submitBtn.click();
+
+    }
+
+},1000);
 // Start
 loadQuestions();
 let warningCount = 0;
