@@ -193,3 +193,123 @@ document.addEventListener("copy", function(e){
 document.addEventListener("paste", function(e){
     e.preventDefault();
 });
+document.addEventListener("contextmenu",(e)=>{
+
+e.preventDefault();
+
+});
+let warning = 0;
+
+document.addEventListener("visibilitychange",()=>{
+
+if(document.hidden){
+
+warning++;
+
+alert("Warning! Do not leave the Exam.");
+
+if(warning>=3){
+
+alert("Exam Submitted due to cheating.");
+
+submitBtn.click();
+
+}
+
+}
+
+});
+// =========================
+// FULL SCREEN MODE
+// =========================
+
+window.addEventListener("load", () => {
+
+    document.documentElement.requestFullscreen().catch(() => {
+
+        alert("Please allow Full Screen Mode to start the exam.");
+
+    });
+
+});
+// =========================
+// EXIT FULL SCREEN DETECTION
+// =========================
+
+let fullscreenWarning = 0;
+
+document.addEventListener("fullscreenchange", () => {
+
+    if (!document.fullscreenElement) {
+
+        fullscreenWarning++;
+
+        alert("Warning! You exited Full Screen.");
+
+        if (fullscreenWarning >= 3) {
+
+            alert("Exam Submitted due to cheating.");
+
+            submitBtn.click();
+
+        }
+
+    }
+
+});
+// =========================
+// BLOCK SHORTCUT KEYS
+// =========================
+
+document.addEventListener("keydown", function(e){
+
+    // F12
+    if(e.key === "F12"){
+        e.preventDefault();
+    }
+
+    // Ctrl+Shift+I / J / C
+    if(e.ctrlKey && e.shiftKey &&
+      (e.key === "I" || e.key === "J" || e.key === "C")){
+        e.preventDefault();
+    }
+
+    // Ctrl+U
+    if(e.ctrlKey && e.key === "u"){
+        e.preventDefault();
+    }
+
+    // Ctrl+S
+    if(e.ctrlKey && e.key === "s"){
+        e.preventDefault();
+    }
+
+});
+// =========================
+// BLOCK SHORTCUT KEYS
+// =========================
+
+document.addEventListener("keydown", function(e){
+
+    // F12
+    if(e.key === "F12"){
+        e.preventDefault();
+    }
+
+    // Ctrl+Shift+I / J / C
+    if(e.ctrlKey && e.shiftKey &&
+      (e.key === "I" || e.key === "J" || e.key === "C")){
+        e.preventDefault();
+    }
+
+    // Ctrl+U
+    if(e.ctrlKey && e.key === "u"){
+        e.preventDefault();
+    }
+
+    // Ctrl+S
+    if(e.ctrlKey && e.key === "s"){
+        e.preventDefault();
+    }
+
+});
