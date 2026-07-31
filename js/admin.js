@@ -106,3 +106,12 @@ logoutBtn.addEventListener("click", () => {
     window.location.href = "admin-login.html";
 
 });
+window.deleteResult = function(id) {
+
+    if (confirm("Delete this result?")) {
+
+        remove(ref(db, "results/" + id));
+
+    }
+
+}
