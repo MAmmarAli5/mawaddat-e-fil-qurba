@@ -854,3 +854,28 @@ footer p{
     z-index:999;
 
 }
+#examTimer{
+
+position:fixed;
+
+top:15px;
+
+right:20px;
+
+background:#8B0000;
+
+color:white;
+
+padding:12px 20px;
+
+border-radius:12px;
+
+font-size:22px;
+
+font-weight:bold;
+
+z-index:99999;
+
+box-shadow:0 5px 15px rgba(0,0,0,.3);
+
+}
