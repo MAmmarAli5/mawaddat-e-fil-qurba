@@ -3,33 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Admin Login</title>
 
-<link rel="stylesheet" href="../css/admin.css">
+<link rel="stylesheet" href="../css/style.css">
+
 </head>
+
 <body>
 
-<div class="container">
+<div class="login-box">
 
-<h1>🔐 Admin Login</h1>
+<h1>Admin Login</h1>
+
+<input
+type="text"
+id="username"
+placeholder="Username"
+>
 
 <input
 type="password"
 id="password"
-placeholder="Enter Admin Password"
+placeholder="Password"
 >
 
-<br><br>
-
 <button id="loginBtn">
-Login
-</button>
 
-<p id="error" style="color:red;"></p>
+Login
+
+</button>
 
 </div>
 
-<script type="module" src="../js/admin-login.js"></script>
+<script src="../js/admin-login.js"></script>
 
 </body>
 </html>
