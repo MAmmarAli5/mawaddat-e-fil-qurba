@@ -1,4 +1,9 @@
 // Firebase SDK
+if (localStorage.getItem("adminLoggedIn") !== "true") {
+
+    window.location.href = "admin-login.html";
+
+}
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getDatabase,
