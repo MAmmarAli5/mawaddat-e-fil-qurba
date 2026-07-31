@@ -47,16 +47,23 @@ let topperName = "";
 let topperScore = -1;
 let topperTotal = 0;
 onValue(resultsRef, (snapshot) => {
+
     table.innerHTML = "";
+
+    let topperName = "";
+    let topperScore = -1;
+    let topperTotal = 0;
 
     snapshot.forEach((childSnapshot) => {
 
         const data = childSnapshot.val();
-if (data.score > topperScore) {
-    topperScore = data.score;
-    topperTotal = data.total;
-    topperName = data.studentName;
-}
+
+        if (data.score > topperScore) {
+            topperScore = data.score;
+            topperTotal = data.total;
+            topperName = data.studentName;
+        }
+
         table.innerHTML += `
             <tr>
                 <td>${data.studentName}</td>
@@ -67,5 +74,9 @@ if (data.score > topperScore) {
         `;
 
     });
+
+    document.getElementById("topperName").innerHTML = topperName;
+    document.getElementById("topperMarks").innerHTML =
+        `${topperScore} / ${topperTotal}`;
 
 });
