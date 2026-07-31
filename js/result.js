@@ -52,7 +52,18 @@ searchBtn.addEventListener("click", async () => {
         if (data.studentName.toLowerCase() === studentName) {
 
             found = true;
+          const after24Hours = data.submittedAt + (24 * 60 * 60 * 1000);
 
+if (Date.now() < after24Hours) {
+
+    resultBox.innerHTML = `
+        <h2>Result Not Published</h2>
+
+        <p>Your result will be available after 24 hours.</p>
+    `;
+
+    return;
+}
             resultBox.innerHTML = `
                 <h2>Student Result</h2>
 
