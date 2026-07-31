@@ -830,3 +830,27 @@ footer p{
     }
 
 }
+#timer{
+
+    position:sticky;
+    top:0;
+
+    background:#6B1E1E;
+
+    color:white;
+
+    padding:15px;
+
+    text-align:center;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+    border-radius:10px;
+
+    margin-bottom:25px;
+
+    z-index:999;
+
+}
