@@ -85,3 +85,12 @@ onValue(resultsRef, (snapshot) => {
         `${topperScore} / ${topperTotal}`;
 
 });
+const logoutBtn = document.getElementById("logoutBtn");
+
+logoutBtn.addEventListener("click", () => {
+
+    localStorage.removeItem("adminLoggedIn");
+
+    window.location.href = "admin-login.html";
+
+});
