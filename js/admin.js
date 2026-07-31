@@ -121,3 +121,12 @@ window.deleteResult = function(id) {
     }
 
 }
+const publishBtn = document.getElementById("publishBtn");
+
+publishBtn.addEventListener("click", async () => {
+
+    await set(ref(db, "settings/resultsPublished"), true);
+
+    alert("Results Published Successfully!");
+
+});
