@@ -151,3 +151,12 @@ document.addEventListener("visibilitychange", () => {
     }
 
 });
+document.addEventListener("contextmenu", function(e){
+    e.preventDefault();
+});
+document.addEventListener("copy", function(e){
+    e.preventDefault();
+});
+document.addEventListener("paste", function(e){
+    e.preventDefault();
+});
