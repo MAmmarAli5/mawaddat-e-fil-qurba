@@ -1,9 +1,8 @@
+if (localStorage.getItem("adminLoggedIn") !== "true") {
+    window.location.href = "admin-login.html";
+}
 // Firebase SDK
-if(localStorage.getItem("adminLoggedIn") !== "true"){
-
-    window.location.href="admin-login.html";
-
-}import {
+import {
   getDatabase,
   ref,
   onValue,
