@@ -19,7 +19,7 @@ import {
     remove,
     set
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
+import { db } from "../firebase/config.js";
 // ===============================
 // FIREBASE CONFIG
 // ===============================
