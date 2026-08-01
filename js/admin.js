@@ -41,15 +41,6 @@ const firebaseConfig = {
     appId: "1:637175775327:web:95da7d655c7606f5ef9bea"
 
 };
-
-// ===============================
-// FIREBASE START
-// ===============================
-
-const app = initializeApp(firebaseConfig);
-
-const db = getDatabase(app);
-
 // ===============================
 // HTML ELEMENTS
 // ===============================
