@@ -1,1 +1,0 @@
-# mawaddat-e-fil-qurba
