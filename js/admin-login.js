@@ -22,3 +22,48 @@ const auth = getAuth(app);
 const loginForm = document.getElementById("loginForm");
 const email = document.getElementById("email");
 const password = document.getElementById("password");
+// ===============================
+// ADMIN LOGIN
+// ===============================
+
+loginForm.addEventListener("submit", (e)=>{
+
+    e.preventDefault();
+
+    const userEmail = email.value;
+    const userPassword = password.value;
+
+
+    signInWithEmailAndPassword(
+        auth,
+        userEmail,
+        userPassword
+    )
+
+    .then((userCredential)=>{
+
+        // Login Successful
+
+        alert("Admin Login Successful");
+
+        localStorage.setItem(
+            "adminLoggedIn",
+            "true"
+        );
+
+        window.location.href = "admin.html";
+
+
+    })
+
+
+    .catch((error)=>{
+
+        alert(
+            "Login Failed: " + error.message
+        );
+
+    });
+
+
+});
