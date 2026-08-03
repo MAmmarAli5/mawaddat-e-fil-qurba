@@ -14,7 +14,6 @@ const firebaseConfig = {
     storageBucket: "mawaddat-fil-qurba.firebasestorage.app",
     messagingSenderId: "637175775327",
     appId: "1:637175775327:web:95da7d655c7606f5ef9bea"
-   // آپ کی Config
 };
 
 const app = initializeApp(firebaseConfig);
