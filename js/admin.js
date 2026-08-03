@@ -63,7 +63,7 @@ const averageMarksBox = document.getElementById("averageMarks");
 
 const highestMarksBox = document.getElementById("highestMarks");
 const excelBtn = document.getElementById("excelBtn");
-
+const pdfBtn = document.getElementById("pdfBtn");
 // ===============================
 // DATABASE REFERENCES
 // ===============================
