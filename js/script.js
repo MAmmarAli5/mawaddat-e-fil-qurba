@@ -85,9 +85,50 @@ async function loadQuestions() {
     }
 
 }
-
 // ===============================
-// START
+// DISPLAY QUESTIONS
 // ===============================
 
+function displayQuestions() {
+
+    questions.forEach((q, index) => {
+
+        let html = `
+
+        <div class="question">
+
+            <h3>${index + 1}. ${q.question}</h3>
+
+            <label>
+                <input type="radio" name="q${index}" value="${q.options[0]}">
+                ${q.options[0]}
+            </label>
+            <br>
+
+            <label>
+                <input type="radio" name="q${index}" value="${q.options[1]}">
+                ${q.options[1]}
+            </label>
+            <br>
+
+            <label>
+                <input type="radio" name="q${index}" value="${q.options[2]}">
+                ${q.options[2]}
+            </label>
+            <br>
+
+            <label>
+                <input type="radio" name="q${index}" value="${q.options[3]}">
+                ${q.options[3]}
+            </label>
+
+        </div>
+
+        `;
+
+        quizContainer.innerHTML += html;
+
+    });
+
+}
 loadQuestions();
