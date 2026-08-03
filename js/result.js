@@ -17,10 +17,7 @@ const firebaseConfig = {
     messagingSenderId: "637175775327",
     appId: "1:637175775327:web:95da7d655c7606f5ef9bea"
 };
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
+import { db } from "../firebase/config.js";
 const searchBtn = document.getElementById("searchBtn");
 const resultBox = document.getElementById("resultBox");
 
