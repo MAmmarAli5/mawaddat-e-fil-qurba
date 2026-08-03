@@ -339,3 +339,58 @@ excelBtn.addEventListener("click", () => {
     XLSX.writeFile(wb, "Exam_Results.xlsx");
 
 });
+// ===============================
+// EXPORT RESULTS TO PDF
+// ===============================
+
+pdfBtn.addEventListener("click", () => {
+
+    const { jsPDF } = window.jspdf;
+
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("Mawaddat-e-Fil-Qurba", 20, 20);
+
+    doc.setFontSize(14);
+    doc.text("Exam Results", 20, 30);
+
+    let y = 45;
+
+    doc.setFontSize(11);
+
+    doc.text("Student", 20, y);
+    doc.text("Marks", 90, y);
+    doc.text("%", 130, y);
+    doc.text("Date", 150, y);
+
+    y += 8;
+
+    const rows = table.getElementsByTagName("tr");
+
+    for (let i = 0; i < rows.length; i++) {
+
+        const cols = rows[i].getElementsByTagName("td");
+
+        if (cols.length > 0) {
+
+            doc.text(cols[0].innerText, 20, y);
+            doc.text(cols[1].innerText, 90, y);
+            doc.text(cols[2].innerText, 130, y);
+            doc.text(cols[3].innerText, 150, y);
+
+            y += 8;
+
+            // نئی Page اگر جگہ ختم ہو جائے
+            if (y > 270) {
+
+                doc.addPage();
+                y = 20;
+
+            }
+        }
+    }
+
+    doc.save("Exam_Results.pdf");
+
+});
