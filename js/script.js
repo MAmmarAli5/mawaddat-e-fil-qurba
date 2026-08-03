@@ -132,3 +132,67 @@ function displayQuestions() {
 
 }
 loadQuestions();
+// ===============================
+// SUBMIT EXAM
+// ===============================
+
+submitBtn.addEventListener("click", async () => {
+
+    let score = 0;
+
+    questions.forEach((q, index) => {
+
+        const answer = document.querySelector(
+            `input[name="q${index}"]:checked`
+        );
+
+        if (answer) {
+
+            const selectedIndex =
+                q.options.indexOf(answer.value);
+
+            if (selectedIndex === q.answer) {
+
+                score++;
+
+            }
+
+        }
+
+    });
+
+    const percentage =
+        ((score / questions.length) * 100).toFixed(2);
+
+    const studentName =
+        localStorage.getItem("studentName") || "Unknown";
+
+    await push(ref(db, "results"), {
+
+        studentName: studentName,
+
+        score: score,
+
+        total: questions.length,
+
+        percentage: percentage,
+
+        submittedAt: Date.now(),
+
+        date: new Date().toLocaleString()
+
+    });
+
+    resultBox.innerHTML = `
+
+    <h2>Exam Submitted Successfully</h2>
+
+    <p>
+    Your result will be published by the Admin.
+    </p>
+
+    `;
+
+    submitBtn.disabled = true;
+
+});
