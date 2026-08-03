@@ -1,15 +1,25 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import {
+    getDatabase
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  databaseURL: "YOUR_DATABASE_URL",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+
+    apiKey: "AIzaSyB3FCQ0PFQaQDwdjIvvVd3shQ_EXqL3iMA",
+
+    authDomain: "mawaddat-fil-qurba.firebaseapp.com",
+
+    databaseURL: "https://mawaddat-fil-qurba-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+    projectId: "mawaddat-fil-qurba",
+
+    storageBucket: "mawaddat-fil-qurba.firebasestorage.app",
+
+    messagingSenderId: "637175775327",
+
+    appId: "1:637175775327:web:95da7d655c7606f5ef9bea"
+
 };
 
 const app = initializeApp(firebaseConfig);
