@@ -62,6 +62,7 @@ const totalStudentsBox = document.getElementById("totalStudents");
 const averageMarksBox = document.getElementById("averageMarks");
 
 const highestMarksBox = document.getElementById("highestMarks");
+const excelBtn = document.getElementById("excelBtn");
 
 // ===============================
 // DATABASE REFERENCES
@@ -304,3 +305,37 @@ setInterval(() => {
 // ===============================
 
 console.log("✅ Admin Panel Loaded Successfully");
+excelBtn.addEventListener("click", () => {
+
+    let wb = XLSX.utils.book_new();
+
+    let ws_data = [
+        ["Student Name", "Marks", "Percentage", "Date"]
+    ];
+
+    const rows = table.getElementsByTagName("tr");
+
+    for (let i = 0; i < rows.length; i++) {
+
+        let cols = rows[i].getElementsByTagName("td");
+
+        if (cols.length > 0) {
+
+            ws_data.push([
+                cols[0].innerText,
+                cols[1].innerText,
+                cols[2].innerText,
+                cols[3].innerText
+            ]);
+
+        }
+
+    }
+
+    let ws = XLSX.utils.aoa_to_sheet(ws_data);
+
+    XLSX.utils.book_append_sheet(wb, ws, "Results");
+
+    XLSX.writeFile(wb, "Exam_Results.xlsx");
+
+});
