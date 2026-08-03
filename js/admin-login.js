@@ -1,27 +1,16 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+    getAuth,
+    signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 const loginBtn = document.getElementById("loginBtn");
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-loginBtn.addEventListener("click", () => {
+const loginForm = document.getElementById("loginForm");
 
-    const username = document.getElementById("username").value;
+const email = document.getElementById("email");
 
-    const password = document.getElementById("password").value;
-
-    if (
-        username === "admin"
-        &&
-        password === "123456"
-    ){
-
-        localStorage.setItem("adminLoggedIn","true");
-
-        window.location.href="admin.html";
-
-    }
-
-    else{
-
-        alert("Wrong Username or Password");
-
-    }
-
-});
+const password = document.getElementById("password");
+   
