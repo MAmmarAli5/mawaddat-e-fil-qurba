@@ -18,43 +18,30 @@
 
 <h1>➕ Add New Question</h1>
 
-<input
-type="text"
-id="question"
-placeholder="Enter Question">
+<form id="questionForm">
 
-<input
-type="text"
-id="option1"
-placeholder="Option 1">
+<input id="question">
 
-<input
-type="text"
-id="option2"
-placeholder="Option 2">
+<input id="option1">
 
-<input
-type="text"
-id="option3"
-placeholder="Option 3">
+<input id="option2">
 
-<input
-type="text"
-id="option4"
-placeholder="Option 4">
+<input id="option3">
 
-<input
-type="number"
-id="answer"
-placeholder="Correct Answer Index (0-3)"
-min="0"
-max="3">
+<input id="option4">
 
-<button id="saveBtn">
+<select id="answer">
+    <option value="0">Option 1</option>
+    <option value="1">Option 2</option>
+    <option value="2">Option 3</option>
+    <option value="3">Option 4</option>
+</select>
 
+<button type="submit">
 Save Question
-
 </button>
+
+</form>
 
 <br><br>
 
