@@ -3,230 +3,610 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-    <title>Student Dashboard | Mawaddat-e-Fil-Qurba</title>
+<title>
+Student Dashboard | Mawaddat-e-Fil-Qurba
+</title>
 
-    <link rel="stylesheet" href="css/style.css">
+<style>
 
-    <style>
+/* =================================
+   GLOBAL
+================================= */
 
-        body{
-            background:#F8F6F1;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        .dashboard-header{
+body{
 
-            background:#0F4C4C;
-            color:white;
-            padding:35px 20px;
+    font-family:Arial, sans-serif;
 
-        }
+    background:#F7F4EC;
 
-        .dashboard-header .container{
+    color:#252525;
 
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:20px;
+    min-height:100vh;
 
-        }
+}
 
-        .dashboard-header h1{
 
-            color:#D4AF37;
-            font-size:32px;
+/* =================================
+   HEADER
+================================= */
 
-        }
+.dashboard-header{
 
-        .dashboard-header p{
+    background:#102F2F;
 
-            color:#eee;
-            margin-top:5px;
+    border-bottom:4px solid #C9A227;
 
-        }
+    padding:22px 6%;
 
-        .logout-btn{
+}
 
-            background:#6B1E1E;
-            color:white;
-            border:none;
-            padding:12px 25px;
-            border-radius:30px;
-            cursor:pointer;
-            font-weight:600;
+.header-content{
 
-        }
+    max-width:1200px;
 
-        .logout-btn:hover{
+    margin:auto;
 
-            background:#D4AF37;
-            color:#222;
+    display:flex;
 
-        }
+    align-items:center;
 
-        .dashboard{
+    justify-content:space-between;
 
-            padding:60px 0;
+}
 
-        }
+.brand h1{
 
-        .welcome-box{
+    color:#D4AF37;
 
-            background:white;
-            padding:30px;
-            border-radius:18px;
-            margin-bottom:30px;
-            box-shadow:0 8px 25px rgba(0,0,0,.08);
+    font-size:30px;
 
-            border-left:5px solid #D4AF37;
+    letter-spacing:.5px;
 
-        }
+}
 
-        .welcome-box h2{
+.brand p{
 
-            color:#0F4C4C;
-            margin-bottom:8px;
+    color:#E8E2D5;
 
-        }
+    margin-top:6px;
 
-        .welcome-box p{
+    font-size:14px;
 
-            color:#666;
+}
 
-        }
+.logout-btn{
 
-        .dashboard-grid{
+    border:none;
 
-            display:grid;
+    background:#6B2020;
 
-            grid-template-columns:
-                repeat(auto-fit,minmax(230px,1fr));
+    color:white;
 
-            gap:25px;
+    padding:11px 25px;
 
-        }
+    border-radius:25px;
 
-        .dashboard-card{
+    font-weight:bold;
 
-            background:white;
+    cursor:pointer;
 
-            padding:30px 25px;
+    transition:.3s;
 
-            border-radius:18px;
+}
 
-            box-shadow:
-                0 8px 25px rgba(0,0,0,.08);
+.logout-btn:hover{
 
-            text-align:center;
+    background:#C9A227;
 
-            transition:.3s;
+    color:#222;
 
-        }
+}
 
-        .dashboard-card:hover{
 
-            transform:translateY(-6px);
+/* =================================
+   MAIN
+================================= */
 
-            box-shadow:
-                0 15px 35px rgba(0,0,0,.13);
+.dashboard{
 
-        }
+    width:90%;
 
-        .dashboard-card .icon{
+    max-width:1200px;
 
-            font-size:40px;
+    margin:45px auto;
 
-            margin-bottom:12px;
+}
 
-        }
 
-        .dashboard-card h3{
+/* =================================
+   WELCOME
+================================= */
 
-            color:#0F4C4C;
+.welcome-box{
 
-            margin-bottom:8px;
+    background:white;
 
-        }
+    border-left:5px solid #C9A227;
 
-        .dashboard-card p{
+    padding:28px 30px;
 
-            color:#666;
+    border-radius:15px;
 
-            font-size:14px;
+    box-shadow:
+    0 8px 25px rgba(0,0,0,.07);
 
-            margin-bottom:18px;
+    margin-bottom:30px;
 
-        }
+}
 
-        .dashboard-card a{
+.welcome-box h2{
 
-            display:inline-block;
+    color:#173B3B;
 
-            background:#0F4C4C;
+    font-size:25px;
 
-            color:white;
+    margin-bottom:8px;
 
-            padding:10px 22px;
+}
 
-            border-radius:25px;
+.welcome-box p{
 
-            font-weight:600;
+    color:#666;
 
-        }
+}
 
-        .dashboard-card a:hover{
 
-            background:#6B1E1E;
+/* =================================
+   CARDS
+================================= */
 
-        }
+.dashboard-grid{
 
-        .account-box{
+    display:grid;
 
-            margin-top:35px;
+    grid-template-columns:
+    repeat(4,1fr);
 
-            background:#F3EFE7;
+    gap:22px;
 
-            padding:25px;
+}
 
-            border-radius:15px;
+.dashboard-card{
 
-        }
+    background:#FFFFFF;
 
-        .account-box h3{
+    border-radius:18px;
 
-            color:#6B1E1E;
-            margin-bottom:10px;
+    padding:30px 20px;
 
-        }
+    text-align:center;
 
-        .account-box p{
+    border:1px solid #E5DED0;
 
-            color:#555;
+    box-shadow:
+    0 8px 25px rgba(0,0,0,.06);
 
-        }
+    transition:.3s;
 
-        @media(max-width:700px){
+}
 
-            .dashboard-header .container{
+.dashboard-card:hover{
 
-                flex-direction:column;
-                text-align:center;
+    transform:translateY(-6px);
 
-            }
+    box-shadow:
+    0 15px 30px rgba(0,0,0,.12);
 
-            .dashboard-header h1{
+}
 
-                font-size:27px;
 
-            }
+/* =================================
+   PROFESSIONAL ICON
+================================= */
 
-        }
+.card-icon{
 
-    </style>
+    width:65px;
+
+    height:65px;
+
+    margin:0 auto 18px;
+
+    border-radius:50%;
+
+    background:#EAF1EF;
+
+    border:2px solid #C9A227;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:#173B3B;
+
+}
+
+
+/* BOOK ICON */
+
+.book-icon{
+
+    width:25px;
+
+    height:30px;
+
+    border:3px solid #173B3B;
+
+    border-radius:3px;
+
+    position:relative;
+
+}
+
+.book-icon:after{
+
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+
+    top:0;
+
+    height:100%;
+
+    border-left:2px solid #173B3B;
+
+}
+
+
+/* EXAM ICON */
+
+.exam-icon{
+
+    width:27px;
+
+    height:32px;
+
+    border:3px solid #173B3B;
+
+    border-radius:3px;
+
+    position:relative;
+
+}
+
+.exam-icon:before{
+
+    content:"✓";
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    position:absolute;
+
+    left:3px;
+
+    top:1px;
+
+}
+
+
+/* RESULT ICON */
+
+.result-icon{
+
+    width:30px;
+
+    height:30px;
+
+    position:relative;
+
+    border-left:3px solid #173B3B;
+
+    border-bottom:3px solid #173B3B;
+
+}
+
+.result-icon:before{
+
+    content:"";
+
+    position:absolute;
+
+    width:7px;
+
+    height:15px;
+
+    background:#173B3B;
+
+    left:5px;
+
+    bottom:0;
+
+}
+
+.result-icon:after{
+
+    content:"";
+
+    position:absolute;
+
+    width:7px;
+
+    height:23px;
+
+    background:#173B3B;
+
+    left:17px;
+
+    bottom:0;
+
+}
+
+
+/* TROPHY ICON */
+
+.trophy-icon{
+
+    width:28px;
+
+    height:25px;
+
+    border:3px solid #173B3B;
+
+    border-radius:4px 4px 10px 10px;
+
+    position:relative;
+
+}
+
+.trophy-icon:before{
+
+    content:"";
+
+    position:absolute;
+
+    width:12px;
+
+    height:10px;
+
+    border-left:3px solid #173B3B;
+
+    border-right:3px solid #173B3B;
+
+    left:5px;
+
+    bottom:-12px;
+
+}
+
+.trophy-icon:after{
+
+    content:"";
+
+    position:absolute;
+
+    width:16px;
+
+    border-bottom:3px solid #173B3B;
+
+    left:3px;
+
+    bottom:-15px;
+
+}
+
+
+/* =================================
+   CARD TEXT
+================================= */
+
+.dashboard-card h3{
+
+    color:#173B3B;
+
+    font-size:19px;
+
+    margin-bottom:10px;
+
+}
+
+.dashboard-card p{
+
+    color:#707070;
+
+    font-size:14px;
+
+    line-height:1.5;
+
+    min-height:42px;
+
+    margin-bottom:20px;
+
+}
+
+
+/* =================================
+   CARD BUTTON
+================================= */
+
+.dashboard-card a{
+
+    display:inline-block;
+
+    text-decoration:none;
+
+    background:#173B3B;
+
+    color:white;
+
+    padding:11px 23px;
+
+    border-radius:25px;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+.dashboard-card a:hover{
+
+    background:#6B2020;
+
+}
+
+
+/* =================================
+   ACCOUNT
+================================= */
+
+.account-box{
+
+    margin-top:35px;
+
+    background:#EFE9DC;
+
+    border-radius:15px;
+
+    padding:25px;
+
+    border-left:5px solid #6B2020;
+
+}
+
+.account-box h3{
+
+    color:#6B2020;
+
+    margin-bottom:12px;
+
+}
+
+.account-box p{
+
+    color:#555;
+
+    margin:7px 0;
+
+}
+
+#studentUID{
+
+    color:#173B3B;
+
+    word-break:break-all;
+
+}
+
+
+/* =================================
+   FOOTER
+================================= */
+
+footer{
+
+    background:#102F2F;
+
+    color:#ddd;
+
+    text-align:center;
+
+    padding:25px;
+
+    margin-top:50px;
+
+}
+
+footer h3{
+
+    color:#D4AF37;
+
+    margin-bottom:6px;
+
+}
+
+footer p{
+
+    font-size:13px;
+
+}
+
+
+/* =================================
+   RESPONSIVE
+================================= */
+
+@media(max-width:900px){
+
+    .dashboard-grid{
+
+        grid-template-columns:
+        repeat(2,1fr);
+
+    }
+
+}
+
+
+@media(max-width:600px){
+
+    .header-content{
+
+        flex-direction:column;
+
+        gap:18px;
+
+        text-align:center;
+
+    }
+
+    .brand h1{
+
+        font-size:24px;
+
+    }
+
+    .dashboard{
+
+        width:92%;
+
+        margin-top:30px;
+
+    }
+
+    .dashboard-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .welcome-box{
+
+        padding:22px;
+
+    }
+
+}
+
+</style>
 
 </head>
 
@@ -234,197 +614,231 @@
 <body>
 
 
+<!-- =================================
+     HEADER
+================================= -->
+
 <header class="dashboard-header">
 
-    <div class="container">
+<div class="header-content">
 
-        <div>
+<div class="brand">
 
-            <h1>
-                Mawaddat-e-Fil-Qurba
-            </h1>
+<h1>
+Mawaddat-e-Fil-Qurba
+</h1>
 
-            <p>
-                Student Dashboard
-            </p>
+<p>
+Student Learning Portal
+</p>
 
-        </div>
+</div>
 
 
-        <button
-            id="logoutBtn"
-            class="logout-btn">
+<button
+id="logoutBtn"
+class="logout-btn">
 
-            Logout
+Logout
 
-        </button>
+</button>
 
-    </div>
+</div>
 
 </header>
 
 
+
+<!-- =================================
+     DASHBOARD
+================================= -->
+
 <main class="dashboard">
 
-    <div class="container">
+
+<!-- WELCOME -->
+
+<div class="welcome-box">
+
+<h2>
+
+Assalam-o-Alaikum,
+<span id="studentName">
+Student
+</span>
+
+</h2>
+
+<p>
+Welcome to your personal learning dashboard.
+</p>
+
+</div>
 
 
-        <div class="welcome-box">
 
-            <h2>
-                Assalam-o-Alaikum,
-                <span id="studentName">
-                    Student
-                </span>
-            </h2>
+<!-- CARDS -->
 
-            <p>
-                Welcome to your personal learning dashboard.
-            </p>
-
-        </div>
+<div class="dashboard-grid">
 
 
-        <div class="dashboard-grid">
+<!-- COURSES -->
+
+<div class="dashboard-card">
+
+<div class="card-icon">
+
+<div class="book-icon"></div>
+
+</div>
+
+<h3>
+My Courses
+</h3>
+
+<p>
+View your assigned courses and learning material.
+</p>
+
+<a href="#">
+View Courses
+</a>
+
+</div>
 
 
-            <!-- COURSES -->
 
-            <div class="dashboard-card">
+<!-- EXAMS -->
 
-                <div class="icon">
-                    📚
-                </div>
+<div class="dashboard-card">
 
-                <h3>
-                    My Courses
-                </h3>
+<div class="card-icon">
 
-                <p>
-                    View your assigned courses.
-                </p>
+<div class="exam-icon"></div>
 
-                <a href="#">
-                    View Courses
-                </a>
+</div>
 
-            </div>
+<h3>
+Available Exams
+</h3>
 
+<p>
+Start an examination assigned to you.
+</p>
 
-            <!-- EXAMS -->
+<a href="exam.html">
+Start Exam
+</a>
 
-            <div class="dashboard-card">
-
-                <div class="icon">
-                    📝
-                </div>
-
-                <h3>
-                    Available Exams
-                </h3>
-
-                <p>
-                    Start an assigned examination.
-                </p>
-
-                <a href="exam.html">
-                    Start Exam
-                </a>
-
-            </div>
+</div>
 
 
-            <!-- RESULTS -->
 
-            <div class="dashboard-card">
+<!-- RESULTS -->
 
-                <div class="icon">
-                    📊
-                </div>
+<div class="dashboard-card">
 
-                <h3>
-                    My Results
-                </h3>
+<div class="card-icon">
 
-                <p>
-                    View your published examination results.
-                </p>
+<div class="result-icon"></div>
 
-                <a href="result.html">
-                    View Results
-                </a>
+</div>
 
-            </div>
+<h3>
+My Results
+</h3>
 
+<p>
+View your published examination results.
+</p>
 
-            <!-- PERFORMANCE -->
+<a href="result.html">
+View Results
+</a>
 
-            <div class="dashboard-card">
-
-                <div class="icon">
-                    🏆
-                </div>
-
-                <h3>
-                    My Performance
-                </h3>
-
-                <p>
-                    Track your academic performance.
-                </p>
-
-                <a href="#">
-                    Coming Soon
-                </a>
-
-            </div>
+</div>
 
 
-        </div>
+
+<!-- PERFORMANCE -->
+
+<div class="dashboard-card">
+
+<div class="card-icon">
+
+<div class="trophy-icon"></div>
+
+</div>
+
+<h3>
+My Performance
+</h3>
+
+<p>
+Track your academic performance and progress.
+</p>
+
+<a href="#">
+Coming Soon
+</a>
+
+</div>
 
 
-        <div class="account-box">
-
-            <h3>
-                🔐 Account Information
-            </h3>
-
-            <p>
-                Your account is protected by
-                Firebase Authentication.
-            </p>
-
-            <p>
-                Student ID:
-                <strong id="studentUID">
-                    Loading...
-                </strong>
-            </p>
-
-        </div>
+</div>
 
 
-    </div>
+
+<!-- ACCOUNT -->
+
+<div class="account-box">
+
+<h3>
+Account Information
+</h3>
+
+<p>
+Your account is protected by Firebase Authentication.
+</p>
+
+<p>
+
+Student ID:
+
+<strong id="studentUID">
+Loading...
+</strong>
+
+</p>
+
+</div>
+
 
 </main>
 
 
+
+<!-- =================================
+     FOOTER
+================================= -->
+
 <footer>
 
-    <h3>
-        Mawaddat-e-Fil-Qurba
-    </h3>
+<h3>
+Mawaddat-e-Fil-Qurba
+</h3>
 
-    <p>
-        Online Learning Platform
-    </p>
+<p>
+Online Learning Platform
+</p>
 
 </footer>
 
 
+
 <script
-    type="module"
-    src="js/student-dashboard.js">
+type="module"
+src="js/student-dashboard.js">
 </script>
 
 
