@@ -1,9 +1,6 @@
 // ===============================
 // FIREBASE IMPORTS
 // ===============================
-// ===============================
-// FIREBASE IMPORTS
-// ===============================
 
 import {
     initializeApp
@@ -21,26 +18,13 @@ import {
 // ===============================
 
 const firebaseConfig = {
-
     apiKey: "AIzaSyB3FCQ0PFQaQDwdjIvvVd3shQ_EXqL3iMA",
-
-    authDomain:
-        "mawaddat-fil-qurba.firebaseapp.com",
-
-    databaseURL:
-        "https://mawaddat-fil-qurba-default-rtdb.asia-southeast1.firebasedatabase.app",
-
-    projectId:
-        "mawaddat-fil-qurba",
-
-    storageBucket:
-        "mawaddat-fil-qurba.firebasestorage.app",
-
-    messagingSenderId:
-        "637175775327",
-
-    appId:
-        "1:637175775327:web:95da7d655c7606f5ef9bea"
+    authDomain: "mawaddat-fil-qurba.firebaseapp.com",
+    databaseURL: "https://mawaddat-fil-qurba-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "mawaddat-fil-qurba",
+    storageBucket: "mawaddat-fil-qurba.firebasestorage.app",
+    messagingSenderId: "637175775327",
+    appId: "1:637175775327:web:95da7d655c7606f5ef9bea"
 };
 
 
@@ -49,34 +33,14 @@ const firebaseConfig = {
 // ===============================
 
 const app = initializeApp(firebaseConfig);
-
 const db = getDatabase(app);
 
 
 // ===============================
-// HTML ELEMENTS
+// FORM
 // ===============================
 
-const form =
-    document.getElementById("questionForm");
-
-const question =
-    document.getElementById("question");
-
-const option1 =
-    document.getElementById("option1");
-
-const option2 =
-    document.getElementById("option2");
-
-const option3 =
-    document.getElementById("option3");
-
-const option4 =
-    document.getElementById("option4");
-
-const answer =
-    document.getElementById("answer");
+const form = document.getElementById("questionForm");
 
 
 // ===============================
@@ -87,41 +51,35 @@ form.addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
+    const question =
+        document.getElementById("question").value.trim();
 
-    // ===========================
-    // GET VALUES
-    // ===========================
+    const option1 =
+        document.getElementById("option1").value.trim();
 
-    const questionText =
-        question.value.trim();
+    const option2 =
+        document.getElementById("option2").value.trim();
 
-    const op1 =
-        option1.value.trim();
+    const option3 =
+        document.getElementById("option3").value.trim();
 
-    const op2 =
-        option2.value.trim();
+    const option4 =
+        document.getElementById("option4").value.trim();
 
-    const op3 =
-        option3.value.trim();
-
-    const op4 =
-        option4.value.trim();
-
-    const correctAnswer =
-        Number(answer.value);
+    const answer =
+        Number(document.getElementById("answer").value);
 
 
     // ===========================
-    // VALIDATION
+    // CHECK EMPTY FIELDS
     // ===========================
 
     if (
-        questionText === "" ||
-        op1 === "" ||
-        op2 === "" ||
-        op3 === "" ||
-        op4 === "" ||
-        answer.value === ""
+        question === "" ||
+        option1 === "" ||
+        option2 === "" ||
+        option3 === "" ||
+        option4 === ""
     ) {
 
         alert("Please fill all fields.");
@@ -131,17 +89,12 @@ form.addEventListener("submit", async (e) => {
 
 
     // ===========================
-    // ANSWER VALIDATION
+    // CHECK ANSWER
     // ===========================
 
-    if (
-        correctAnswer < 1 ||
-        correctAnswer > 4
-    ) {
+    if (answer < 0 || answer > 3) {
 
-        alert(
-            "Correct answer must be 1, 2, 3 or 4."
-        );
+        alert("Please select a valid correct answer.");
 
         return;
     }
@@ -153,38 +106,30 @@ form.addEventListener("submit", async (e) => {
 
     const questionData = {
 
-        course:
-            "Maarifat-e-Masoomin",
+        course: "Maarifat-e-Masoomin",
 
-        session:
-            2,
+        session: 2,
 
-        topic:
-            "Imam Muhammad Baqir (ع)",
+        topic: "Imam Muhammad Baqir (ع)",
 
-        marks:
-            1,
+        marks: 1,
 
-        question:
-            questionText,
+        question: question,
 
         options: [
-
-            op1,
-            op2,
-            op3,
-            op4
-
+            option1,
+            option2,
+            option3,
+            option4
         ],
 
-        answer:
-            correctAnswer
+        answer: answer
 
     };
 
 
     // ===========================
-    // SAVE TO FIREBASE
+    // SAVE
     // ===========================
 
     try {
@@ -194,18 +139,11 @@ form.addEventListener("submit", async (e) => {
             questionData
         );
 
-
         alert(
             "✅ Question Added Successfully!"
         );
 
-
-        // =======================
-        // CLEAR FORM
-        // =======================
-
         form.reset();
-
 
     }
 
@@ -217,7 +155,7 @@ form.addEventListener("submit", async (e) => {
         );
 
         alert(
-            "❌ Question could not be saved.\n\n" +
+            "❌ Question was not saved.\n\n" +
             error.message
         );
 
