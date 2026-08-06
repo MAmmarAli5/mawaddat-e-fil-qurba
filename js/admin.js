@@ -2,10 +2,37 @@
 // ADMIN LOGIN PROTECTION
 // ===============================
 
-if (localStorage.getItem("adminLoggedIn") !== "true") {
-    window.location.href = "admin-login.html";
-}
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
+import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyB3FCQ0PFQaQDwdjIvvVd3shQ_EXqL3iMA",
+    authDomain: "mawaddat-fil-qurba.firebaseapp.com",
+    databaseURL: "https://mawaddat-fil-qurba-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "mawaddat-fil-qurba",
+    storageBucket: "mawaddat-fil-qurba.firebasestorage.app",
+    messagingSenderId: "637175775327",
+    appId: "1:637175775327:web:95da7d655c7606f5ef9bea"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, (user) => {
+
+    if (!user) {
+        window.location.href = "admin-login.html";
+        return;
+    }
+
+    console.log("Admin authenticated:", user.email);
+
+});
 // ===============================
 // FIREBASE IMPORTS
 // ===============================
@@ -257,13 +284,13 @@ logoutBtn.addEventListener("click", () => {
 
     const logout = confirm("Do you want to Logout?");
 
-    if (!logout) return;
-
-    localStorage.removeItem("adminLoggedIn");
-
-    window.location.href = "admin-login.html";
-
-});
+    signOut(auth)
+    .then(() => {
+        window.location.href = "admin-login.html";
+    })
+    .catch((error) => {
+        alert("Logout Error: " + error.message);
+    });
 // ===============================
 // CHECK RESULT STATUS
 // ===============================
