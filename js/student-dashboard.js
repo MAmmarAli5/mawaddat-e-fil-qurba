@@ -2,16 +2,19 @@
 // STUDENT DASHBOARD
 // MAWADDAT-E-FIL-QURBA
 // ==========================================
-
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
     getAuth,
     onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    getDatabase,
+    ref,
+    get
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
 // ==========================================
@@ -50,6 +53,8 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 
+const db = getDatabase(app);
+
 
 // ==========================================
 // HTML ELEMENTS
@@ -66,10 +71,10 @@ const logoutBtn =
 
 
 // ==========================================
-// CHECK AUTHENTICATION
+// CHECK STUDENT LOGIN
 // ==========================================
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
 
     if (!user) {
 
@@ -81,32 +86,74 @@ onAuthStateChanged(auth, (user) => {
 
 
     // ======================================
-    // STUDENT INFORMATION
+    // STUDENT UID
     // ======================================
 
     const uid = user.uid;
 
-    const email = user.email || "Student";
-
-
     studentUID.textContent = uid;
 
-    /*
-       Temporary display:
 
-       We will later replace this
-       with the student's actual name
-       stored in Realtime Database.
-    */
+    // ======================================
+    // LOAD STUDENT PROFILE
+    // ======================================
 
-    studentName.textContent =
-        email.split("@")[0];
+    try {
+
+        const profileRef =
+            ref(db, "students/" + uid);
+
+        const snapshot =
+            await get(profileRef);
 
 
-    console.log(
-        "Student authenticated:",
-        uid
-    );
+        if (snapshot.exists()) {
+
+            const student =
+                snapshot.val();
+
+
+            // Student name
+
+            if (student.name) {
+
+                studentName.textContent =
+                    student.name;
+
+            }
+
+
+            console.log(
+                "Student Profile:",
+                student
+            );
+
+        }
+
+        else {
+
+            studentName.textContent =
+                "Student";
+
+            console.warn(
+                "Student profile not found."
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Profile Loading Error:",
+            error
+        );
+
+        studentName.textContent =
+            "Student";
+
+    }
 
 });
 
@@ -115,34 +162,40 @@ onAuthStateChanged(auth, (user) => {
 // LOGOUT
 // ==========================================
 
-logoutBtn.addEventListener("click", async () => {
+logoutBtn.addEventListener(
+    "click",
+    async () => {
 
-    const confirmLogout =
-        confirm("Do you want to logout?");
+        const confirmLogout =
+            confirm(
+                "Do you want to logout?"
+            );
 
-    if (!confirmLogout) return;
+
+        if (!confirmLogout) return;
 
 
-    try {
+        try {
 
-        await signOut(auth);
+            await signOut(auth);
 
-        window.location.href =
-            "student-login.html";
+            window.location.href =
+                "student-login.html";
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Logout Error:",
+                error
+            );
+
+            alert(
+                "Unable to logout. Please try again."
+            );
+
+        }
 
     }
-
-    catch (error) {
-
-        console.error(
-            "Logout Error:",
-            error
-        );
-
-        alert(
-            "Unable to logout. Please try again."
-        );
-
-    }
-
-});
+);
