@@ -100,10 +100,8 @@ if (loginForm) {
                 message.textContent =
                     "Login successful!";
 
-
-                window.location.href =
-                    "admin.html";
-
+              window.location.href =
+               "../admin.html";
             }
 
             catch (error) {
