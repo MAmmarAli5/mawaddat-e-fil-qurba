@@ -6,47 +6,59 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Online Exam</title>
+<title>معرفتِ معصومین — آن لائن امتحان</title>
+
 <link rel="stylesheet" href="../css/style.css">
 
 </head>
+
 <body>
-<div id="examTimer">
-⏰ Time Left: <span id="timer">04:45:00</span>
-</div>
+
 <div class="exam-box">
 
-<h1>معرفتِ معصومین Online Exam</h1>
+    <h1>معرفتِ معصومین آن لائن امتحان</h1>
 
-<h3 id="display-name"></h3>
-<div id="timer">
-    ⏳ Time Left: 04:45:00
+    <h3 id="display-name"></h3>
+
+    <div id="examStatus">
+        امتحان شروع ہونے کا انتظار کریں۔
+    </div>
+
+    <div id="examTimer">
+        ⏰ باقی وقت:
+        <span id="timer">--:--:--</span>
+    </div>
+
+    <div id="quiz-container">
+    </div>
+
+    <button id="submitBtn" type="button">
+        امتحان جمع کریں
+    </button>
+
+    <div id="result">
+    </div>
+
 </div>
 
-<div id="quiz-container">
-</div>
-<button id="submitBtn">
-Submit Exam
-</button>
-<div id="result">
-</div>
-</div>
+
 <script type="module" src="../js/script.js"></script>
+
 
 <script>
 
 const studentName = localStorage.getItem("studentName");
 
-if(studentName){
-    document.getElementById("display-name").innerHTML =
-    "طالب علم: " + studentName;
+if (studentName) {
+
+    document.getElementById("display-name").textContent =
+        "طالب علم: " + studentName;
+
 }
 
+</script>
 
-</script>
-<script>
-document.documentElement.requestFullscreen();
-</script>
 
 </body>
+
 </html>
