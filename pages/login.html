@@ -1,54 +1,169 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ur" dir="rtl">
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<title>Student Login</title>
+    <title>
+        Login | Mawaddat-e-Fil-Qurba
+    </title>
 
-<link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet"
+          href="../css/auth.css">
 
 </head>
 
+
 <body>
 
-<div class="login-box">
 
-<h1>Start Exam</h1>
+<div class="auth-page">
 
-<input
-type="text"
-id="studentName"
-placeholder="Student Name">
 
-<input
-type="text"
-id="studentId"
-placeholder="Student ID">
+    <div class="auth-card">
 
-<button type="button" onclick="startExam()">
-Start Exam
-</button>
+
+        <div class="auth-logo">
+
+            <img src="../images/logo.png"
+                 alt="Mawaddat-e-Fil-Qurba">
+
+        </div>
+
+
+        <h1>
+            Login
+        </h1>
+
+
+        <p class="auth-subtitle">
+            Mawaddat-e-Fil-Qurba Online Learning Platform
+        </p>
+
+
+        <!-- LOGIN TYPE -->
+
+        <div class="login-type">
+
+            <button
+                type="button"
+                id="studentMode"
+                class="mode-btn active">
+
+                🎓 Student Login
+
+            </button>
+
+
+            <button
+                type="button"
+                id="adminMode"
+                class="mode-btn">
+
+                🔐 Admin Login
+
+            </button>
+
+        </div>
+
+
+        <form id="loginForm">
+
+
+            <label>
+                Email Address
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                required
+            >
+
+
+            <label>
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                required
+            >
+
+
+            <button
+                type="submit"
+                class="auth-btn"
+                id="loginBtn">
+
+                Student Login
+
+            </button>
+
+
+        </form>
+
+
+        <button
+            type="button"
+            id="forgotPassword"
+            class="forgot-btn">
+
+            Forgot Password?
+
+        </button>
+
+
+        <div id="message"
+             class="message">
+        </div>
+
+
+        <div id="studentLinks">
+
+
+            <p style="margin-top:20px;">
+                New Student?
+            </p>
+
+
+            <a href="student-register.html"
+               class="register-btn">
+
+                Create Student Account
+
+            </a>
+
+        </div>
+
+
+        <a href="../index.html"
+           class="back-home">
+
+            ← Back to Home
+
+        </a>
+
+
+    </div>
+
+
 </div>
-<script>
-function startExam() {
 
-    const name = document.getElementById("studentName").value.trim();
-    const id = document.getElementById("studentId").value.trim();
 
-    if (name === "" || id === "") {
-        alert("براہ کرم Student Name اور Student ID درج کریں۔");
-        return;
-    }
 
-    localStorage.setItem("studentName", name);
-    localStorage.setItem("studentId", id);
-
-    window.location.href = "exam.html";
-}
+<script type="module"
+        src="../js/login.js">
 </script>
+
+
 </body>
+
 </html>
