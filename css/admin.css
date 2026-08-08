@@ -312,3 +312,158 @@ tr:hover {
     }
 
 }
+/* =========================================
+   STUDENT APPLICATIONS
+========================================= */
+
+.students-section {
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 15px;
+
+    margin-bottom: 30px;
+
+    box-shadow:
+        0 5px 15px
+        rgba(0,0,0,.08);
+}
+
+
+.students-section h2 {
+
+    color: #0F4C4C;
+
+    margin-bottom: 20px;
+
+}
+
+
+.students-table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+}
+
+
+.students-section table {
+
+    min-width: 900px;
+
+}
+
+
+.approve-btn {
+
+    background: #198754;
+
+    color: white;
+
+    border: none;
+
+    padding: 8px 12px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    margin: 2px;
+
+}
+
+
+.approve-btn:hover {
+
+    background: #146c43;
+
+}
+
+
+.reject-btn {
+
+    background: #dc3545;
+
+    color: white;
+
+    border: none;
+
+    padding: 8px 12px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    margin: 2px;
+
+}
+
+
+.reject-btn:hover {
+
+    background: #b02a37;
+
+}
+
+
+.status-pending {
+
+    background: #fff3cd;
+
+    color: #856404;
+
+    padding: 5px 10px;
+
+    border-radius: 15px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+}
+
+
+.status-approved {
+
+    background: #d1e7dd;
+
+    color: #0f5132;
+
+    padding: 5px 10px;
+
+    border-radius: 15px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+}
+
+
+.status-rejected {
+
+    background: #f8d7da;
+
+    color: #842029;
+
+    padding: 5px 10px;
+
+    border-radius: 15px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+}
+
+
+#studentsMessage {
+
+    margin-bottom: 15px;
+
+    color: #666;
+
+}
