@@ -1,309 +1,127 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl">
+<html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>
-        Student Dashboard | Mawaddat-e-Fil-Qurba
-    </title>
+<title>Student Dashboard | Mawaddat-e-Fil-Qurba</title>
 
-    <link rel="stylesheet"
-          href="../css/dashboard.css">
+<link rel="stylesheet" href="../css/style.css">
 
 </head>
 
-
 <body>
-
-
-<!-- =================================================
-     HEADER
-================================================= -->
 
 <header class="dashboard-header">
 
-    <div class="brand">
-
-        <h2>
-            مودّتِ فی القربى
-        </h2>
-
-        <span>
-            Online Learning Platform
-        </span>
-
+    <div>
+        <h1>Mawaddat-e-Fil-Qurba</h1>
+        <p>Student Dashboard</p>
     </div>
 
-
-    <button id="logoutBtn"
-            class="logout-btn">
-
+    <button id="logoutBtn">
         Logout
-
     </button>
 
 </header>
 
 
-
-<!-- =================================================
-     MAIN
-================================================= -->
-
 <main class="dashboard-container">
-
-
-    <!-- WELCOME -->
 
     <section class="welcome-card">
 
-        <div>
-
-            <p class="small-title">
-                خوش آمدید
-            </p>
-
-            <h1 id="studentName">
-                طالب علم
-            </h1>
-
-            <p id="studentEmail">
-                Loading...
-            </p>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =================================================
-         STATUS
-    ================================================= -->
-
-    <section id="statusCard"
-             class="status-card">
-
-
-        <div class="loading">
-
-            طالب علم کی معلومات حاصل کی جا رہی ہیں...
-
-        </div>
-
-
-    </section>
-
-
-
-    <!-- =================================================
-         STUDENT INFORMATION
-    ================================================= -->
-
-    <section class="info-section">
-
-
         <h2>
-            طالب علم کی معلومات
+            Assalamu Alaikum,
+            <span id="studentName">Student</span>
         </h2>
 
+        <p>
+            Welcome to your learning dashboard.
+        </p>
+
+    </section>
+
+
+    <section class="student-info">
+
+        <h2>Student Information</h2>
 
         <div class="info-grid">
 
-
-            <div class="info-box">
-
-                <span>
-                    نام
-                </span>
-
-                <strong id="infoName">
-                    -
-                </strong>
-
+            <div class="info-card">
+                <span>Name</span>
+                <strong id="infoName">Loading...</strong>
             </div>
 
-
-            <div class="info-box">
-
-                <span>
-                    ای میل
-                </span>
-
-                <strong id="infoEmail">
-                    -
-                </strong>
-
+            <div class="info-card">
+                <span>Course</span>
+                <strong id="infoCourse">Loading...</strong>
             </div>
 
-
-            <div class="info-box">
-
-                <span>
-                    فون نمبر
-                </span>
-
-                <strong id="infoPhone">
-                    -
-                </strong>
-
+            <div class="info-card">
+                <span>Batch</span>
+                <strong id="infoBatch">Loading...</strong>
             </div>
 
-
-            <div class="info-box">
-
-                <span>
-                    واٹس ایپ
-                </span>
-
-                <strong id="infoWhatsapp">
-                    -
-                </strong>
-
+            <div class="info-card">
+                <span>Status</span>
+                <strong id="infoStatus">Loading...</strong>
             </div>
-
-
-            <div class="info-box">
-
-                <span>
-                    عمر
-                </span>
-
-                <strong id="infoAge">
-                    -
-                </strong>
-
-            </div>
-
-
-            <div class="info-box">
-
-                <span>
-                    شہر
-                </span>
-
-                <strong id="infoCity">
-                    -
-                </strong>
-
-            </div>
-
 
         </div>
-
 
     </section>
 
 
+    <section class="course-dashboard">
 
-    <!-- =================================================
-         COURSE
-    ================================================= -->
-
-    <section class="course-section">
-
-
-        <h2>
-            میرا کورس
+        <h2 id="courseTitle">
+            Your Course
         </h2>
 
-
-        <div class="course-card">
-
-
-            <div class="course-icon">
-                📚
-            </div>
+        <p id="courseDescription">
+            Your enrolled course material will appear here.
+        </p>
 
 
-            <div class="course-content">
+        <div class="dashboard-actions">
 
-                <h2 id="courseName">
-                    -
-                </h2>
-
-                <p>
-                    آپ کا منتخب کردہ کورس
-                </p>
-
-                <span id="courseStatus"
-                      class="course-status">
-
-                    -
-
-                </span>
-
-            </div>
-
-
-        </div>
-
-
-        <div id="courseActions"
-             class="course-actions">
-
-        </div>
-
-
-    </section>
-
-
-
-    <!-- =================================================
-         EXAM
-    ================================================= -->
-
-    <section class="exam-section">
-
-
-        <div class="exam-card">
-
-
-            <div>
-
-                <span class="exam-icon">
-                    📝
-                </span>
-
-                <h2>
-                    Online Examination
-                </h2>
-
-                <p>
-                    مقررہ وقت پر اپنا امتحان دیں۔
-                </p>
-
-            </div>
-
-
-            <button id="examBtn"
-                    class="primary-btn">
-
-                Start Exam
-
+            <button id="classesBtn">
+                📚 Classes
             </button>
 
+            <button id="booksBtn">
+                📖 Course Book / PDF
+            </button>
+
+            <button id="examBtn">
+                📝 Online Exam
+            </button>
 
         </div>
-
 
     </section>
 
 
+    <section class="latest-update">
+
+        <h2>Latest Update</h2>
+
+        <p id="latestUpdate">
+            Loading latest updates...
+        </p>
+
+    </section>
 
 </main>
 
 
-
 <script type="module"
-        src="../js/student-dashboard.js">
+src="../js/student-dashboard.js">
 </script>
-
 
 </body>
 
