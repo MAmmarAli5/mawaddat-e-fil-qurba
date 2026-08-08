@@ -4,9 +4,106 @@ import {
 
 import {
     getAuth,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    onAuthStateChanged(
+    auth,
+    async (user) => {
 
+        if (!user) {
+
+            window.location.href =
+                "pages/login.html";
+
+            return;
+
+        }
+
+
+        try {
+
+            const adminRef =
+                ref(
+                    db,
+                    "admins/" + user.uid
+                );
+
+
+            const snapshot =
+                await get(adminRef);
+
+
+            if (
+                !snapshot.exists() ||
+                snapshot.val().role !== "admin"
+            ) {
+
+                await signOut(auth);
+
+                localStorage.removeItem(
+                    "adminLoggedIn"
+                );
+
+                localStorage.removeItem(
+                    "adminUID"
+                );
+
+
+                alert(
+                    "Access Denied: یہ Admin اکاؤنٹ نہیں ہے۔"
+                );
+
+
+                window.location.href =
+                    "pages/login.html";
+
+                return;
+
+            }
+
+
+            // Admin verified
+
+            localStorage.setItem(
+                "adminLoggedIn",
+                "true"
+            );
+
+
+            localStorage.setItem(
+                "adminUID",
+                user.uid
+            );
+
+
+            console.log(
+                "Admin authenticated:",
+                user.email
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Admin verification error:",
+                error
+            );
+
+
+            await signOut(auth);
+
+
+            window.location.href =
+                "pages/login.html";
+
+        }
+
+    }
+);
+import {
+    getDatabase,
+    ref,
+    get
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 // ======================================
 // FIREBASE CONFIG
