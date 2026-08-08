@@ -5,6 +5,10 @@
 // ======================================================
 
 import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
     getDatabase,
     ref,
     get,
@@ -13,10 +17,41 @@ import {
 
 
 // ======================================================
-// FIREBASE DATABASE
+// FIREBASE CONFIG
 // ======================================================
 
-const db = getDatabase();
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyB3FCQ0PFQaQDwdjIvvVd3shQ_EXqL3iMA",
+
+    authDomain:
+        "mawaddat-fil-qurba.firebaseapp.com",
+
+    databaseURL:
+        "https://mawaddat-fil-qurba-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+    projectId:
+        "mawaddat-fil-qurba",
+
+    storageBucket:
+        "mawaddat-fil-qurba.firebasestorage.app",
+
+    messagingSenderId:
+        "637175775327",
+
+    appId:
+        "1:637175775327:web:95da7d655c7606f5ef9bea"
+};
+
+
+// ======================================================
+// FIREBASE INITIALIZE
+// ======================================================
+
+const app = initializeApp(firebaseConfig);
+
+const db = getDatabase(app);
 
 
 // ======================================================
@@ -40,30 +75,57 @@ const examStatus =
 
 
 // ======================================================
-// EXAM SETTINGS
+// STUDENT NAME
 // ======================================================
 
-// پاکستان کا وقت UTC+5
+const studentName =
+    localStorage.getItem("studentName") || "Unknown";
 
-const EXAM_START =
-    new Date("2026-08-10T19:00:00+05:00").getTime();
+const displayName =
+    document.getElementById("display-name");
 
-const EXAM_END =
-    new Date("2026-08-10T23:00:00+05:00").getTime();
+if (displayName) {
 
-const RESULT_PUBLISH_TIME =
-    new Date("2026-08-11T19:00:00+05:00").getTime();
+    displayName.textContent =
+        "طالب علم: " + studentName;
+}
 
 
-// طالب علم کو زیادہ سے زیادہ 2 گھنٹے
+// ======================================================
+// DEFAULT SETTINGS
+// اگر Firebase Settings نہ ملیں تو یہ استعمال ہوں گی
+// ======================================================
 
-const EXAM_DURATION =
-    2 * 60 * 60 * 1000;
+const DEFAULT_SETTINGS = {
+
+    examStart:
+        "2026-08-15T19:00:00+05:00",
+
+    examEnd:
+        "2026-08-15T23:00:00+05:00",
+
+    examDuration:
+        7200000,
+
+    resultPublish:
+        "2026-08-16T19:00:00+05:00",
+
+    course:
+        "Maarifat-e-Masomeen",
+
+    session:
+        "Session 2",
+
+    topic:
+        "Imam Muhammad Baqir (ع)"
+};
 
 
 // ======================================================
 // VARIABLES
 // ======================================================
+
+let settings = DEFAULT_SETTINGS;
 
 let questions = [];
 
@@ -81,20 +143,44 @@ let examDeadline = null;
 
 
 // ======================================================
-// STUDENT NAME
+// LOAD SETTINGS FROM FIREBASE
 // ======================================================
 
-const studentName =
-    localStorage.getItem("studentName") || "Unknown";
+async function loadSettings() {
 
-const displayName =
-    document.getElementById("display-name");
+    try {
 
-if (displayName) {
+        const snapshot =
+            await get(
+                ref(db, "Settings")
+            );
 
-    displayName.textContent =
-        "طالب علم: " + studentName;
+        if (snapshot.exists()) {
 
+            const data =
+                snapshot.val();
+
+            settings = {
+
+                ...DEFAULT_SETTINGS,
+
+                ...data
+            };
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Settings loading error:",
+            error
+        );
+
+        settings =
+            DEFAULT_SETTINGS;
+    }
 }
 
 
@@ -108,7 +194,10 @@ async function getServerTime() {
 
         const snapshot =
             await get(
-                ref(db, ".info/serverTimeOffset")
+                ref(
+                    db,
+                    ".info/serverTimeOffset"
+                )
             );
 
         serverTimeOffset =
@@ -124,18 +213,14 @@ async function getServerTime() {
         );
 
         serverTimeOffset = 0;
-
     }
-
 }
 
 
-// موجودہ اندازاً سرور وقت
-
 function getServerNow() {
 
-    return Date.now() + serverTimeOffset;
-
+    return Date.now()
+        + serverTimeOffset;
 }
 
 
@@ -149,14 +234,12 @@ function showExamStatus(message) {
 
         examStatus.textContent =
             message;
-
     }
-
 }
 
 
 // ======================================================
-// TIMER DISPLAY
+// FORMAT TIME
 // ======================================================
 
 function formatTime(milliseconds) {
@@ -164,14 +247,17 @@ function formatTime(milliseconds) {
     if (milliseconds <= 0) {
 
         return "00:00:00";
-
     }
 
     const totalSeconds =
-        Math.floor(milliseconds / 1000);
+        Math.floor(
+            milliseconds / 1000
+        );
 
     const hours =
-        Math.floor(totalSeconds / 3600);
+        Math.floor(
+            totalSeconds / 3600
+        );
 
     const minutes =
         Math.floor(
@@ -181,17 +267,21 @@ function formatTime(milliseconds) {
     const seconds =
         totalSeconds % 60;
 
-
     return (
 
-        String(hours).padStart(2, "0") +
-        ":" +
-        String(minutes).padStart(2, "0") +
-        ":" +
-        String(seconds).padStart(2, "0")
+        String(hours)
+            .padStart(2, "0")
 
+        + ":" +
+
+        String(minutes)
+            .padStart(2, "0")
+
+        + ":" +
+
+        String(seconds)
+            .padStart(2, "0")
     );
-
 }
 
 
@@ -201,16 +291,16 @@ function formatTime(milliseconds) {
 
 function updateTimer() {
 
-    if (!examStarted || examSubmitted) {
+    if (
+        !examStarted ||
+        examSubmitted
+    ) {
 
         return;
-
     }
-
 
     const now =
         getServerNow();
-
 
     const remaining =
         examDeadline - now;
@@ -218,7 +308,9 @@ function updateTimer() {
 
     if (remaining <= 0) {
 
-        clearInterval(timerInterval);
+        clearInterval(
+            timerInterval
+        );
 
         timerElement.textContent =
             "00:00:00";
@@ -226,45 +318,47 @@ function updateTimer() {
         autoSubmitExam();
 
         return;
-
     }
 
 
     timerElement.textContent =
         formatTime(remaining);
-
 }
 
 
 // ======================================================
-// START TIMER
+// START EXAM TIMER
 // ======================================================
 
 function startExamTimer() {
 
     examStarted = true;
 
-
     const now =
         getServerNow();
-
 
     examStartTime = now;
 
 
-    // اگر دو گھنٹے 11 بجے سے آگے جائیں
-    // تو امتحان 11 بجے ہی ختم ہوگا
+    const maximumDeadline =
+        now +
+        Number(settings.examDuration);
+
+
+    const officialExamEnd =
+        new Date(
+            settings.examEnd
+        ).getTime();
+
 
     examDeadline =
         Math.min(
-            now + EXAM_DURATION,
-            EXAM_END
+            maximumDeadline,
+            officialExamEnd
         );
 
 
-    // صفحہ Refresh ہونے کی صورت میں
-    // وقت دوبارہ صفر سے شروع نہ ہو
-
+    // Save timer
     localStorage.setItem(
         "maarifatSession2ExamStart",
         String(examStartTime)
@@ -282,7 +376,8 @@ function startExamTimer() {
     );
 
 
-    submitBtn.disabled = false;
+    submitBtn.disabled =
+        false;
 
 
     updateTimer();
@@ -293,12 +388,11 @@ function startExamTimer() {
             updateTimer,
             1000
         );
-
 }
 
 
 // ======================================================
-// RESTORE PREVIOUS EXAM TIMER
+// RESTORE EXAM TIMER
 // ======================================================
 
 function restoreExamTimer() {
@@ -314,22 +408,21 @@ function restoreExamTimer() {
         );
 
 
-    if (!savedStart || !savedDeadline) {
+    if (
+        !savedStart ||
+        !savedDeadline
+    ) {
 
         return false;
-
     }
 
 
     const now =
         getServerNow();
 
-
     const deadline =
         Number(savedDeadline);
 
-
-    // اگر امتحان کا وقت پہلے ہی ختم ہو چکا ہے
 
     if (now >= deadline) {
 
@@ -342,7 +435,6 @@ function restoreExamTimer() {
         );
 
         return false;
-
     }
 
 
@@ -352,7 +444,8 @@ function restoreExamTimer() {
     examDeadline =
         deadline;
 
-    examStarted = true;
+    examStarted =
+        true;
 
 
     showExamStatus(
@@ -360,7 +453,8 @@ function restoreExamTimer() {
     );
 
 
-    submitBtn.disabled = false;
+    submitBtn.disabled =
+        false;
 
 
     updateTimer();
@@ -374,7 +468,6 @@ function restoreExamTimer() {
 
 
     return true;
-
 }
 
 
@@ -391,55 +484,55 @@ async function checkExamWindow() {
         getServerNow();
 
 
-    // ------------------------------------------
-    // امتحان شروع ہونے سے پہلے
-    // ------------------------------------------
+    const examStart =
+        new Date(
+            settings.examStart
+        ).getTime();
 
-    if (now < EXAM_START) {
+
+    const examEnd =
+        new Date(
+            settings.examEnd
+        ).getTime();
+
+
+    // امتحان سے پہلے
+
+    if (now < examStart) {
 
         showExamStatus(
             "امتحان 10 اگست 2026 کو شام 7:00 بجے شروع ہوگا۔"
         );
 
-
         timerElement.textContent =
             "امتحان شروع نہیں ہوا";
 
-
-        submitBtn.disabled = true;
-
+        submitBtn.disabled =
+            true;
 
         return;
-
     }
 
 
-    // ------------------------------------------
-    // امتحان کا آخری وقت گزر گیا
-    // ------------------------------------------
+    // امتحان ختم
 
-    if (now >= EXAM_END) {
+    if (now >= examEnd) {
 
         showExamStatus(
             "امتحان کا مقررہ وقت ختم ہو چکا ہے۔"
         );
 
-
         timerElement.textContent =
             "وقت ختم";
 
-
-        submitBtn.disabled = true;
-
+        submitBtn.disabled =
+            true;
 
         return;
-
     }
 
 
-    // ------------------------------------------
     // پہلے سے شروع کیا ہوا امتحان
-    // ------------------------------------------
 
     const restored =
         restoreExamTimer();
@@ -448,16 +541,12 @@ async function checkExamWindow() {
     if (restored) {
 
         return;
-
     }
 
 
-    // ------------------------------------------
-    // نیا امتحان شروع
-    // ------------------------------------------
+    // نیا امتحان
 
     startExamTimer();
-
 }
 
 
@@ -474,7 +563,11 @@ async function loadQuestions() {
     try {
 
         const snapshot =
-            awaitget(ref(db, "Questions"))
+            await get(
+                ref(
+                    db,
+                    "Questions"
+                )
             );
 
 
@@ -484,7 +577,6 @@ async function loadQuestions() {
                 "<h3>ابھی کوئی سوال موجود نہیں۔</h3>";
 
             return;
-
         }
 
 
@@ -509,12 +601,10 @@ async function loadQuestions() {
         displayQuestions();
 
 
-        // سوالات لوڈ ہونے کے بعد
-        // امتحان کا وقت چیک کریں
-
         await checkExamWindow();
 
     }
+
 
     catch (error) {
 
@@ -526,9 +616,7 @@ async function loadQuestions() {
 
         quizContainer.innerHTML =
             "<h3>سوالات لوڈ کرنے میں مسئلہ پیش آیا۔</h3>";
-
     }
-
 }
 
 
@@ -618,7 +706,6 @@ function displayQuestions() {
 
         }
     );
-
 }
 
 
@@ -643,12 +730,13 @@ function calculateScore() {
             if (!selected) {
 
                 return;
-
             }
 
 
             const selectedIndex =
-                Number(selected.value);
+                Number(
+                    selected.value
+                );
 
 
             if (
@@ -657,7 +745,6 @@ function calculateScore() {
             ) {
 
                 score++;
-
             }
 
         }
@@ -665,7 +752,6 @@ function calculateScore() {
 
 
     return score;
-
 }
 
 
@@ -680,11 +766,11 @@ async function submitExam(
     if (examSubmitted) {
 
         return;
-
     }
 
 
-    examSubmitted = true;
+    examSubmitted =
+        true;
 
 
     if (timerInterval) {
@@ -692,11 +778,11 @@ async function submitExam(
         clearInterval(
             timerInterval
         );
-
     }
 
 
-    submitBtn.disabled = true;
+    submitBtn.disabled =
+        true;
 
 
     const score =
@@ -709,7 +795,12 @@ async function submitExam(
 
     const percentage =
         total > 0
-            ? ((score / total) * 100).toFixed(2)
+
+            ? (
+                (score / total)
+                * 100
+              ).toFixed(2)
+
             : "0.00";
 
 
@@ -720,7 +811,12 @@ async function submitExam(
     try {
 
         await push(
-            ref(db, "results"),
+
+            ref(
+                db,
+                "Results"
+            ),
+
             {
 
                 studentName:
@@ -736,19 +832,21 @@ async function submitExam(
                     percentage,
 
                 course:
-                    "Maarifat-e-Masomeen",
+                    settings.course,
 
                 session:
-                    "Session 2",
+                    settings.session,
 
                 topic:
-                    "Imam Muhammad Baqir (ع)",
+                    settings.topic,
 
                 submittedAt:
                     submittedAt,
 
                 publishAt:
-                    RESULT_PUBLISH_TIME,
+                    new Date(
+                        settings.resultPublish
+                    ).getTime(),
 
                 resultStatus:
                     "pending",
@@ -757,23 +855,23 @@ async function submitExam(
                     automatic,
 
                 examDate:
-                    "10 August 2026",
+                "15 August 2026",
 
                 examStart:
                     "7:00 PM",
 
                 examEnd:
-                    "11:00 PM"
-
+                "11:00 PM"
             }
         );
 
 
-        // پرانا ٹائمر ختم
+        // ٹائمر صاف کریں
 
         localStorage.removeItem(
             "maarifatSession2ExamStart"
         );
+
 
         localStorage.removeItem(
             "maarifatSession2ExamDeadline"
@@ -797,7 +895,6 @@ async function submitExam(
             showExamStatus(
                 "امتحان کامیابی سے جمع ہو گیا ہے۔"
             );
-
         }
 
 
@@ -814,7 +911,7 @@ async function submitExam(
                 </p>
 
                 <p>
-                    نتیجہ 11 اگست 2026 کو شام 7:00 بجے جاری کیا جائے گا۔
+                    نتیجہ 16 اگست 2026 کو شام 7:00 بجے جاری کیا جائے گا۔
                 </p>
 
                 <p>
@@ -827,8 +924,8 @@ async function submitExam(
 
         `;
 
-
     }
+
 
     catch (error) {
 
@@ -838,9 +935,12 @@ async function submitExam(
         );
 
 
-        examSubmitted = false;
+        examSubmitted =
+            false;
 
-        submitBtn.disabled = false;
+
+        submitBtn.disabled =
+            false;
 
 
         resultBox.innerHTML = `
@@ -851,14 +951,12 @@ async function submitExam(
             </p>
 
         `;
-
     }
-
 }
 
 
 // ======================================================
-// MANUAL SUBMIT BUTTON
+// MANUAL SUBMIT
 // ======================================================
 
 submitBtn.addEventListener(
@@ -868,7 +966,6 @@ submitBtn.addEventListener(
         if (!examStarted) {
 
             return;
-
         }
 
 
@@ -881,7 +978,6 @@ submitBtn.addEventListener(
         if (!confirmSubmit) {
 
             return;
-
         }
 
 
@@ -900,17 +996,23 @@ async function autoSubmitExam() {
     if (examSubmitted) {
 
         return;
-
     }
 
 
     await submitExam(true);
-
 }
 
 
 // ======================================================
-// START
+// START SYSTEM
 // ======================================================
 
-loadQuestions();
+async function startSystem() {
+
+    await loadSettings();
+
+    await loadQuestions();
+}
+
+
+startSystem();
