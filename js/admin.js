@@ -1,8 +1,22 @@
-// ===============================
-// ADMIN LOGIN PROTECTION
-// ===============================
+// ======================================================
+// MAWADDAT-E-FIL-QURBA
+// ADMIN PANEL
+// RESULTS MANAGEMENT
+// ======================================================
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+// ======================================================
+// FIREBASE APP
+// ======================================================
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+
+// ======================================================
+// FIREBASE AUTHENTICATION
+// ======================================================
 
 import {
     getAuth,
@@ -10,414 +24,1141 @@ import {
     signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyB3FCQ0PFQaQDwdjIvvVd3shQ_EXqL3iMA",
-    authDomain: "mawaddat-fil-qurba.firebaseapp.com",
-    databaseURL: "https://mawaddat-fil-qurba-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "mawaddat-fil-qurba",
-    storageBucket: "mawaddat-fil-qurba.firebasestorage.app",
-    messagingSenderId: "637175775327",
-    appId: "1:637175775327:web:95da7d655c7606f5ef9bea"
-};
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-onAuthStateChanged(auth, (user) => {
-
-    if (!user) {
-        window.location.href = "admin-login.html";
-        return;
-    }
-
-    console.log("Admin authenticated:", user.email);
-
-});
-// ===============================
-// FIREBASE IMPORTS
-// ===============================
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+// ======================================================
+// FIREBASE DATABASE
+// ======================================================
 
 import {
     getDatabase,
     ref,
     onValue,
     remove,
+    update,
     set
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-import { db } from "../firebase/config.js";
-// ===============================
+
+
+// ======================================================
 // FIREBASE CONFIG
-// ===============================
+// ======================================================
 
 const firebaseConfig = {
 
-    apiKey: "AIzaSyB3FCQ0PFQaQDwdjIvvVd3shQ_EXqL3iMA",
+    apiKey:
+        "AIzaSyB3FCQ0PFQaQDwdjIvvVd3shQ_EXqL3iMA",
 
-    authDomain: "mawaddat-fil-qurba.firebaseapp.com",
+    authDomain:
+        "mawaddat-fil-qurba.firebaseapp.com",
 
-    databaseURL: "https://mawaddat-fil-qurba-default-rtdb.asia-southeast1.firebasedatabase.app",
+    databaseURL:
+        "https://mawaddat-fil-qurba-default-rtdb.asia-southeast1.firebasedatabase.app",
 
-    projectId: "mawaddat-fil-qurba",
+    projectId:
+        "mawaddat-fil-qurba",
 
-    storageBucket: "mawaddat-fil-qurba.firebasestorage.app",
+    storageBucket:
+        "mawaddat-fil-qurba.firebasestorage.app",
 
-    messagingSenderId: "637175775327",
+    messagingSenderId:
+        "637175775327",
 
-    appId: "1:637175775327:web:95da7d655c7606f5ef9bea"
-
+    appId:
+        "1:637175775327:web:95da7d655c7606f5ef9bea"
 };
-// ===============================
+
+
+// ======================================================
+// INITIALIZE FIREBASE
+// ======================================================
+
+const app =
+    initializeApp(firebaseConfig);
+
+const auth =
+    getAuth(app);
+
+const db =
+    getDatabase(app);
+
+
+// ======================================================
 // HTML ELEMENTS
-// ===============================
+// ======================================================
 
-const table = document.getElementById("resultsTable");
+const table =
+    document.getElementById("resultsTable");
 
-const search = document.getElementById("search");
+const search =
+    document.getElementById("search");
 
-const logoutBtn = document.getElementById("logoutBtn");
+const logoutBtn =
+    document.getElementById("logoutBtn");
 
-const publishBtn = document.getElementById("publishBtn");
+const publishBtn =
+    document.getElementById("publishBtn");
 
-const topperName = document.getElementById("topperName");
+const topperName =
+    document.getElementById("topperName");
 
-const topperMarks = document.getElementById("topperMarks");
+const topperMarks =
+    document.getElementById("topperMarks");
 
-const totalStudentsBox = document.getElementById("totalStudents");
+const totalStudentsBox =
+    document.getElementById("totalStudents");
 
-const averageMarksBox = document.getElementById("averageMarks");
+const averageMarksBox =
+    document.getElementById("averageMarks");
 
-const highestMarksBox = document.getElementById("highestMarks");
-const excelBtn = document.getElementById("excelBtn");
-const pdfBtn = document.getElementById("pdfBtn");
-// ===============================
+const highestMarksBox =
+    document.getElementById("highestMarks");
+
+const excelBtn =
+    document.getElementById("excelBtn");
+
+const pdfBtn =
+    document.getElementById("pdfBtn");
+
+
+// ======================================================
 // DATABASE REFERENCES
-// ===============================
+// ======================================================
 
-const resultsRef = ref(db, "results");
+const resultsRef =
+    ref(db, "Results");
 
-const settingsRef = ref(db, "settings/resultsPublished");
+const settingsRef =
+    ref(db, "Settings");
 
-// ===============================
+const resultsPublishedRef =
+    ref(db, "Settings/resultsPublished");
+
+
+// ======================================================
 // VARIABLES
-// ===============================
+// ======================================================
 
 let totalStudents = 0;
 
 let totalScore = 0;
 
-let highestScore = 0;
+let highestScore = -1;
 
 let highestTotal = 0;
 
 let topper = "";
-// ===============================
+
+let allResults = [];
+
+let resultPublishTime = null;
+
+
+// ======================================================
+// ADMIN LOGIN PROTECTION
+// ======================================================
+
+onAuthStateChanged(
+    auth,
+    (user) => {
+
+        if (!user) {
+
+            window.location.href =
+                "admin-login.html";
+
+            return;
+        }
+
+        console.log(
+            "Admin authenticated:",
+            user.email
+        );
+    }
+);
+
+
+// ======================================================
+// LOAD SETTINGS
+// ======================================================
+
+onValue(
+    settingsRef,
+    (snapshot) => {
+
+        if (!snapshot.exists()) {
+
+            console.log(
+                "Settings not found."
+            );
+
+            return;
+        }
+
+
+        const settings =
+            snapshot.val();
+
+
+        if (
+            settings.resultPublish
+        ) {
+
+            resultPublishTime =
+                new Date(
+                    settings.resultPublish
+                ).getTime();
+
+        }
+
+
+        updatePublishButton();
+
+    }
+);
+
+
+// ======================================================
+// UPDATE PUBLISH BUTTON
+// ======================================================
+
+function updatePublishButton() {
+
+    if (!publishBtn) {
+
+        return;
+    }
+
+
+    const now =
+        Date.now();
+
+
+    // اگر نتیجہ پہلے ہی publish ہوچکا ہے
+
+    if (
+        window.resultsAlreadyPublished ===
+        true
+    ) {
+
+        publishBtn.innerHTML =
+            "✅ Results Published";
+
+        publishBtn.disabled =
+            true;
+
+        return;
+    }
+
+
+    // اگر publish time ابھی نہیں آیا
+
+    if (
+        resultPublishTime &&
+        now < resultPublishTime
+    ) {
+
+        publishBtn.innerHTML =
+            "🔒 Results Locked Until 16 August 2026, 7:00 PM";
+
+        publishBtn.disabled =
+            true;
+
+        return;
+    }
+
+
+    publishBtn.innerHTML =
+        "📢 Publish Results";
+
+    publishBtn.disabled =
+        false;
+}
+
+
+// ======================================================
 // LOAD RESULTS
-// ===============================
+// ======================================================
 
-onValue(resultsRef, (snapshot) => {
+onValue(
+    resultsRef,
+    (snapshot) => {
 
-    table.innerHTML = "";
+        table.innerHTML = "";
 
-    totalStudents = 0;
-    totalScore = 0;
+        totalStudents = 0;
 
-    highestScore = 0;
-    highestTotal = 0;
+        totalScore = 0;
 
-    topper = "";
+        highestScore = -1;
 
-    snapshot.forEach((childSnapshot) => {
+        highestTotal = 0;
 
-        const data = childSnapshot.val();
+        topper = "";
 
-        totalStudents++;
+        allResults = [];
 
-        totalScore += Number(data.score);
 
-        if (Number(data.score) > highestScore) {
+        if (!snapshot.exists()) {
 
-            highestScore = Number(data.score);
+            table.innerHTML = `
 
-            highestTotal = Number(data.total);
+                <tr>
 
-            topper = data.studentName;
+                    <td colspan="6">
 
+                        ابھی کوئی نتیجہ موجود نہیں۔
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            updateStatistics();
+
+            return;
         }
 
-        table.innerHTML += `
 
-<tr>
+        snapshot.forEach(
+            (childSnapshot) => {
 
-<td>${data.studentName}</td>
+                const data =
+                    childSnapshot.val();
 
-<td>${data.score} / ${data.total}</td>
+                const id =
+                    childSnapshot.key;
 
-<td>${data.percentage}%</td>
 
-<td>${data.date}</td>
+                allResults.push({
 
-<td>
+                    id: id,
 
-<button
-class="delete-btn"
-onclick="deleteResult('${childSnapshot.key}')">
+                    ...data
 
-Delete
+                });
 
-</button>
 
-</td>
+                totalStudents++;
 
-</tr>
 
-`;
+                const score =
+                    Number(
+                        data.score || 0
+                    );
 
-    });
 
-    topperName.innerHTML = topper || "-";
+                const total =
+                    Number(
+                        data.total || 0
+                    );
 
-    topperMarks.innerHTML =
-        highestScore + " / " + highestTotal;
 
-    totalStudentsBox.innerHTML = totalStudents;
+                totalScore +=
+                    score;
 
-    highestMarksBox.innerHTML =
-        highestScore + " / " + highestTotal;
 
-    if (totalStudents > 0) {
+                if (
+                    score >
+                    highestScore
+                ) {
 
-        averageMarksBox.innerHTML =
-            (totalScore / totalStudents).toFixed(2);
+                    highestScore =
+                        score;
 
-    } else {
+                    highestTotal =
+                        total;
 
-        averageMarksBox.innerHTML = "0";
+                    topper =
+                        data.studentName ||
+                        "Unknown";
+
+                }
+
+
+                const percentage =
+                    data.percentage ??
+                    (
+                        total > 0
+                            ? (
+                                score /
+                                total *
+                                100
+                              ).toFixed(2)
+                            : "0.00"
+                    );
+
+
+                const status =
+                    data.resultStatus ||
+                    "pending";
+
+
+                const statusText =
+                    status === "published"
+
+                        ? "✅ Published"
+
+                        : "⏳ Pending";
+
+
+                const date =
+                    data.date ||
+                    (
+                        data.submittedAt
+                            ? new Date(
+                                data.submittedAt
+                              ).toLocaleString()
+                            : "-"
+                    );
+
+
+                table.innerHTML += `
+
+                    <tr>
+
+                        <td>
+                            ${escapeHTML(
+                                data.studentName ||
+                                "Unknown"
+                            )}
+                        </td>
+
+                        <td>
+                            ${score} / ${total}
+                        </td>
+
+                        <td>
+                            ${percentage}%
+                        </td>
+
+                        <td>
+                            ${date}
+                        </td>
+
+                        <td>
+                            ${statusText}
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="delete-btn"
+                                onclick="deleteResult('${id}')"
+                            >
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        );
+
+
+        updateStatistics();
 
     }
+);
 
-});
 
-// ===============================
-// LIVE SEARCH
-// ===============================
+// ======================================================
+// UPDATE STATISTICS
+// ======================================================
 
-search.addEventListener("keyup", () => {
+function updateStatistics() {
 
-    const filter = search.value.toLowerCase();
+    if (topperName) {
 
-    const rows = table.getElementsByTagName("tr");
+        topperName.innerHTML =
+            topper || "-";
+    }
 
-    for (let i = 0; i < rows.length; i++) {
 
-        const firstCol =
-            rows[i].getElementsByTagName("td")[0];
+    if (topperMarks) {
 
-        if (firstCol) {
+        topperMarks.innerHTML =
+            highestScore >= 0
+                ? highestScore +
+                  " / " +
+                  highestTotal
+                : "0";
+    }
 
-            const text =
-                firstCol.textContent.toLowerCase();
 
-            rows[i].style.display =
-                text.includes(filter)
-                    ? ""
-                    : "none";
+    if (totalStudentsBox) {
+
+        totalStudentsBox.innerHTML =
+            totalStudents;
+    }
+
+
+    if (highestMarksBox) {
+
+        highestMarksBox.innerHTML =
+            highestScore >= 0
+                ? highestScore +
+                  " / " +
+                  highestTotal
+                : "0";
+    }
+
+
+    if (averageMarksBox) {
+
+        if (totalStudents > 0) {
+
+            averageMarksBox.innerHTML =
+                (
+                    totalScore /
+                    totalStudents
+                ).toFixed(2) + "%";
 
         }
+        else {
 
+            averageMarksBox.innerHTML =
+                "0%";
+        }
     }
+}
 
-});
-// ===============================
-// DELETE RESULT
-// ===============================
 
-window.deleteResult = function(id) {
+// ======================================================
+// SEARCH
+// ======================================================
 
-    const confirmDelete = confirm(
-        "Are you sure you want to delete this student's result?"
+if (search) {
+
+    search.addEventListener(
+        "keyup",
+        () => {
+
+            const filter =
+                search.value
+                    .toLowerCase()
+                    .trim();
+
+
+            const rows =
+                table.getElementsByTagName(
+                    "tr"
+                );
+
+
+            for (
+                let i = 0;
+                i < rows.length;
+                i++
+            ) {
+
+                const firstCol =
+                    rows[i]
+                        .getElementsByTagName(
+                            "td"
+                        )[0];
+
+
+                if (firstCol) {
+
+                    const text =
+                        firstCol
+                            .textContent
+                            .toLowerCase();
+
+
+                    rows[i].style.display =
+                        text.includes(filter)
+                            ? ""
+                            : "none";
+
+                }
+            }
+
+        }
     );
 
-    if (!confirmDelete) return;
+}
 
-    remove(ref(db, "results/" + id))
-        .then(() => {
 
-            alert("Result Deleted Successfully.");
+// ======================================================
+// DELETE RESULT
+// ======================================================
 
-        })
-        .catch((error) => {
+window.deleteResult =
+    async function(id) {
 
-            alert("Error : " + error.message);
+        const confirmDelete =
+            confirm(
+                "کیا آپ واقعی اس طالب علم کا نتیجہ حذف کرنا چاہتے ہیں؟"
+            );
 
-        });
 
-};
+        if (!confirmDelete) {
 
-// ===============================
+            return;
+        }
+
+
+        try {
+
+            await remove(
+                ref(
+                    db,
+                    "Results/" + id
+                )
+            );
+
+
+            alert(
+                "نتیجہ کامیابی سے حذف ہوگیا۔"
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            alert(
+                "نتیجہ حذف نہیں ہوسکا: " +
+                error.message
+            );
+
+        }
+
+    };
+
+
+// ======================================================
 // PUBLISH RESULTS
-// ===============================
+// ======================================================
 
-publishBtn.addEventListener("click", async () => {
+if (publishBtn) {
 
-    try {
+    publishBtn.addEventListener(
+        "click",
+        async () => {
 
-        await set(settingsRef, true);
+            const now =
+                Date.now();
 
-        alert("Results Published Successfully.");
+
+            // وقت سے پہلے Publish نہ ہو
+
+            if (
+                resultPublishTime &&
+                now < resultPublishTime
+            ) {
+
+                alert(
+                    "نتائج 16 اگست 2026 کو شام 7:00 بجے سے پہلے شائع نہیں کیے جاسکتے۔"
+                );
+
+                return;
+            }
+
+
+            const confirmPublish =
+                confirm(
+                    "کیا آپ تمام نتائج شائع کرنا چاہتے ہیں؟"
+                );
+
+
+            if (!confirmPublish) {
+
+                return;
+            }
+
+
+            try {
+
+                const updates = {};
+
+
+                allResults.forEach(
+                    (result) => {
+
+                        updates[
+                            "Results/" +
+                            result.id +
+                            "/resultStatus"
+                        ] =
+                            "published";
+
+
+                        updates[
+                            "Results/" +
+                            result.id +
+                            "/publishedAt"
+                        ] =
+                            now;
+
+                    }
+                );
+
+
+                // تمام نتائج Published
+
+                if (
+                    Object.keys(updates)
+                        .length > 0
+                ) {
+
+                    await update(
+                        ref(db),
+                        updates
+                    );
+
+                }
+
+
+                // Settings میں بھی status محفوظ
+
+                await set(
+                    resultsPublishedRef,
+                    true
+                );
+
+
+                window.resultsAlreadyPublished =
+                    true;
+
+
+                publishBtn.innerHTML =
+                    "✅ Results Published";
+
+                publishBtn.disabled =
+                    true;
+
+
+                alert(
+                    "تمام نتائج کامیابی سے شائع ہوگئے۔"
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "نتائج شائع نہیں ہوسکے: " +
+                    error.message
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+// ======================================================
+// RESULT PUBLISHED STATUS
+// ======================================================
+
+onValue(
+    resultsPublishedRef,
+    (snapshot) => {
+
+        window.resultsAlreadyPublished =
+            snapshot.exists()
+                ? snapshot.val() === true
+                : false;
+
+
+        updatePublishButton();
 
     }
-    catch (error) {
+);
 
-        alert(error.message);
 
-    }
-
-});
-
-// ===============================
+// ======================================================
 // LOGOUT
-// ===============================
+// ======================================================
 
-logoutBtn.addEventListener("click", () => {
+if (logoutBtn) {
 
-    const logout = confirm("Do you want to Logout?");
+    logoutBtn.addEventListener(
+        "click",
+        async () => {
 
-    signOut(auth)
-    .then(() => {
-        window.location.href = "admin-login.html";
-    })
-    .catch((error) => {
-        alert("Logout Error: " + error.message);
-    });
-// ===============================
-// CHECK RESULT STATUS
-// ===============================
+            const confirmLogout =
+                confirm(
+                    "کیا آپ Admin Panel سے Logout کرنا چاہتے ہیں؟"
+                );
 
-onValue(settingsRef, (snapshot) => {
 
-    if (snapshot.exists()) {
+            if (!confirmLogout) {
 
-        const published = snapshot.val();
+                return;
+            }
 
-        if (published) {
 
-            publishBtn.innerHTML = "✅ Results Published";
-            publishBtn.disabled = true;
+            try {
 
-        } else {
+                await signOut(auth);
 
-            publishBtn.innerHTML = "Publish Results";
-            publishBtn.disabled = false;
+                window.location.href =
+                    "admin-login.html";
 
-        }
+            }
 
-    }
+            catch (error) {
 
-});
+                alert(
+                    "Logout Error: " +
+                    error.message
+                );
 
-// ===============================
-// AUTO REFRESH TABLE
-// ===============================
-
-setInterval(() => {
-
-    onValue(resultsRef, () => {});
-
-}, 10000);
-
-// ===============================
-// CONSOLE MESSAGE
-// ===============================
-
-console.log("✅ Admin Panel Loaded Successfully");
-excelBtn.addEventListener("click", () => {
-
-    let wb = XLSX.utils.book_new();
-
-    let ws_data = [
-        ["Student Name", "Marks", "Percentage", "Date"]
-    ];
-
-    const rows = table.getElementsByTagName("tr");
-
-    for (let i = 0; i < rows.length; i++) {
-
-        let cols = rows[i].getElementsByTagName("td");
-
-        if (cols.length > 0) {
-
-            ws_data.push([
-                cols[0].innerText,
-                cols[1].innerText,
-                cols[2].innerText,
-                cols[3].innerText
-            ]);
+            }
 
         }
+    );
 
-    }
+}
 
-    let ws = XLSX.utils.aoa_to_sheet(ws_data);
 
-    XLSX.utils.book_append_sheet(wb, ws, "Results");
+// ======================================================
+// EXCEL EXPORT
+// ======================================================
 
-    XLSX.writeFile(wb, "Exam_Results.xlsx");
+if (excelBtn) {
 
-});
-// ===============================
-// EXPORT RESULTS TO PDF
-// ===============================
+    excelBtn.addEventListener(
+        "click",
+        () => {
 
-pdfBtn.addEventListener("click", () => {
+            if (
+                typeof XLSX ===
+                "undefined"
+            ) {
 
-    const { jsPDF } = window.jspdf;
+                alert(
+                    "Excel library load نہیں ہوئی۔"
+                );
 
-    const doc = new jsPDF();
+                return;
+            }
 
-    doc.setFontSize(18);
-    doc.text("Mawaddat-e-Fil-Qurba", 20, 20);
 
-    doc.setFontSize(14);
-    doc.text("Exam Results", 20, 30);
+            const wb =
+                XLSX.utils.book_new();
 
-    let y = 45;
 
-    doc.setFontSize(11);
+            const wsData = [
 
-    doc.text("Student", 20, y);
-    doc.text("Marks", 90, y);
-    doc.text("%", 130, y);
-    doc.text("Date", 150, y);
+                [
+                    "Student Name",
+                    "Marks",
+                    "Percentage",
+                    "Date",
+                    "Status"
+                ]
 
-    y += 8;
+            ];
 
-    const rows = table.getElementsByTagName("tr");
 
-    for (let i = 0; i < rows.length; i++) {
+            allResults.forEach(
+                (result) => {
 
-        const cols = rows[i].getElementsByTagName("td");
+                    wsData.push([
 
-        if (cols.length > 0) {
+                        result.studentName ||
+                            "Unknown",
 
-            doc.text(cols[0].innerText, 20, y);
-            doc.text(cols[1].innerText, 90, y);
-            doc.text(cols[2].innerText, 130, y);
-            doc.text(cols[3].innerText, 150, y);
+                        (
+                            result.score ||
+                            0
+                        ) +
+                        " / " +
+                        (
+                            result.total ||
+                            0
+                        ),
+
+                        (
+                            result.percentage ||
+                            "0"
+                        ) + "%",
+
+                        result.date ||
+                            (
+                                result.submittedAt
+                                    ? new Date(
+                                        result.submittedAt
+                                      ).toLocaleString()
+                                    : "-"
+                            ),
+
+                        result.resultStatus ===
+                            "published"
+
+                            ? "Published"
+
+                            : "Pending"
+
+                    ]);
+
+                }
+            );
+
+
+            const ws =
+                XLSX.utils.aoa_to_sheet(
+                    wsData
+                );
+
+
+            XLSX.utils.book_append_sheet(
+                wb,
+                ws,
+                "Results"
+            );
+
+
+            XLSX.writeFile(
+                wb,
+                "Mawaddat_Fil_Qurba_Results.xlsx"
+            );
+
+        }
+    );
+
+}
+
+
+// ======================================================
+// PDF EXPORT
+// ======================================================
+
+if (pdfBtn) {
+
+    pdfBtn.addEventListener(
+        "click",
+        () => {
+
+            if (
+                !window.jspdf
+            ) {
+
+                alert(
+                    "PDF library load نہیں ہوئی۔"
+                );
+
+                return;
+            }
+
+
+            const {
+                jsPDF
+            } =
+                window.jspdf;
+
+
+            const doc =
+                new jsPDF();
+
+
+            doc.setFontSize(18);
+
+            doc.text(
+                "Mawaddat-e-Fil-Qurba",
+                20,
+                20
+            );
+
+
+            doc.setFontSize(14);
+
+            doc.text(
+                "Maarifat-e-Masomeen - Session 2",
+                20,
+                30
+            );
+
+
+            doc.setFontSize(11);
+
+            doc.text(
+                "Exam Date: 15 August 2026",
+                20,
+                40
+            );
+
+
+            doc.text(
+                "Result Date: 16 August 2026 - 7:00 PM",
+                20,
+                48
+            );
+
+
+            let y = 62;
+
+
+            doc.text(
+                "Student",
+                15,
+                y
+            );
+
+            doc.text(
+                "Marks",
+                85,
+                y
+            );
+
+            doc.text(
+                "%",
+                125,
+                y
+            );
+
+            doc.text(
+                "Status",
+                145,
+                y
+            );
+
 
             y += 8;
 
-            // نئی Page اگر جگہ ختم ہو جائے
-            if (y > 270) {
 
-                doc.addPage();
-                y = 20;
+            allResults.forEach(
+                (result) => {
 
-            }
+                    const name =
+                        result.studentName ||
+                        "Unknown";
+
+
+                    const marks =
+                        (
+                            result.score ||
+                            0
+                        ) +
+                        "/" +
+                        (
+                            result.total ||
+                            0
+                        );
+
+
+                    const percentage =
+                        (
+                            result.percentage ||
+                            "0"
+                        ) + "%";
+
+
+                    const status =
+                        result.resultStatus ===
+                        "published"
+
+                            ? "Published"
+
+                            : "Pending";
+
+
+                    doc.text(
+                        String(name)
+                            .substring(0, 30),
+                        15,
+                        y
+                    );
+
+
+                    doc.text(
+                        marks,
+                        85,
+                        y
+                    );
+
+
+                    doc.text(
+                        percentage,
+                        125,
+                        y
+                    );
+
+
+                    doc.text(
+                        status,
+                        145,
+                        y
+                    );
+
+
+                    y += 8;
+
+
+                    if (y > 275) {
+
+                        doc.addPage();
+
+                        y = 20;
+
+                    }
+
+                }
+            );
+
+
+            doc.save(
+                "Mawaddat_Fil_Qurba_Results.pdf"
+            );
+
         }
-    }
+    );
 
-    doc.save("Exam_Results.pdf");
+}
 
-});
+
+// ======================================================
+// HTML ESCAPE
+// ======================================================
+
+function escapeHTML(value) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+}
+
+
+// ======================================================
+// CONSOLE
+// ======================================================
+
+console.log(
+    "✅ Mawaddat-e-Fil-Qurba Admin Panel Loaded"
+);
