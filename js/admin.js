@@ -1162,3 +1162,369 @@ function escapeHTML(value) {
 console.log(
     "✅ Mawaddat-e-Fil-Qurba Admin Panel Loaded"
 );
+// =========================================
+// STUDENT APPLICATIONS
+// =========================================
+
+import {
+    getDatabase,
+    ref,
+    onValue,
+    update
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+// =========================================
+// HTML ELEMENTS
+// =========================================
+
+const studentsTable =
+    document.getElementById("studentsTable");
+
+const studentsMessage =
+    document.getElementById("studentsMessage");
+
+
+// =========================================
+// DATABASE REFERENCE
+// =========================================
+
+const studentsRef =
+    ref(db, "students");
+
+
+// =========================================
+// LOAD STUDENTS
+// =========================================
+
+if (studentsTable) {
+
+    onValue(
+        studentsRef,
+        (snapshot) => {
+
+            studentsTable.innerHTML = "";
+
+            let studentCount = 0;
+
+
+            if (!snapshot.exists()) {
+
+                studentsMessage.innerHTML =
+                    "No student applications found.";
+
+                return;
+
+            }
+
+
+            snapshot.forEach(
+                (childSnapshot) => {
+
+                    const uid =
+                        childSnapshot.key;
+
+                    const student =
+                        childSnapshot.val();
+
+
+                    studentCount++;
+
+
+                    const status =
+                        student.status ||
+                        "pending";
+
+
+                    let statusHTML = "";
+
+
+                    if (status === "approved") {
+
+                        statusHTML = `
+                            <span class="status-approved">
+                                Approved
+                            </span>
+                        `;
+
+                    }
+
+                    else if (status === "rejected") {
+
+                        statusHTML = `
+                            <span class="status-rejected">
+                                Rejected
+                            </span>
+                        `;
+
+                    }
+
+                    else {
+
+                        statusHTML = `
+                            <span class="status-pending">
+                                Pending
+                            </span>
+                        `;
+
+                    }
+
+
+                    let actionHTML = "";
+
+
+                    if (status === "pending") {
+
+                        actionHTML = `
+
+                            <button
+                                class="approve-btn"
+                                onclick="approveStudent('${uid}')">
+
+                                ✓ Approve
+
+                            </button>
+
+
+                            <button
+                                class="reject-btn"
+                                onclick="rejectStudent('${uid}')">
+
+                                ✕ Reject
+
+                            </button>
+
+                        `;
+
+                    }
+
+                    else if (status === "approved") {
+
+                        actionHTML = `
+
+                            <button
+                                class="reject-btn"
+                                onclick="rejectStudent('${uid}')">
+
+                                Reject
+
+                            </button>
+
+                        `;
+
+                    }
+
+                    else {
+
+                        actionHTML = `
+
+                            <button
+                                class="approve-btn"
+                                onclick="approveStudent('${uid}')">
+
+                                Approve Again
+
+                            </button>
+
+                        `;
+
+                    }
+
+
+                    studentsTable.innerHTML += `
+
+                        <tr>
+
+                            <td>
+                                ${student.name || "-"}
+                            </td>
+
+                            <td>
+                                ${student.email || "-"}
+                            </td>
+
+                            <td>
+                                ${student.phone || "-"}
+                            </td>
+
+                            <td>
+                                ${student.course || "-"}
+                            </td>
+
+                            <td>
+                                ${student.city || "-"}
+                            </td>
+
+                            <td>
+                                ${statusHTML}
+                            </td>
+
+                            <td>
+                                ${actionHTML}
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            );
+
+
+            studentsMessage.innerHTML =
+                `${studentCount} student application(s) found.`;
+
+        }
+    );
+
+}
+
+
+// =========================================
+// APPROVE STUDENT
+// =========================================
+
+window.approveStudent =
+    async function(uid) {
+
+
+        const confirmApproval =
+            confirm(
+                "Do you want to approve this student?"
+            );
+
+
+        if (!confirmApproval) {
+
+            return;
+
+        }
+
+
+        try {
+
+
+            await update(
+                ref(
+                    db,
+                    "students/" + uid
+                ),
+                {
+
+                    status:
+                        "approved",
+
+                    enrolled:
+                        true,
+
+                    approvedAt:
+                        Date.now(),
+
+                    approvalDate:
+                        new Date()
+                            .toLocaleString(
+                                "en-PK"
+                            )
+
+                }
+            );
+
+
+            alert(
+                "Student approved successfully."
+            );
+
+
+        }
+
+        catch (error) {
+
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "Error: " +
+                error.message
+            );
+
+        }
+
+    };
+
+
+// =========================================
+// REJECT STUDENT
+// =========================================
+
+window.rejectStudent =
+    async function(uid) {
+
+
+        const confirmRejection =
+            confirm(
+                "Do you want to reject this student?"
+            );
+
+
+        if (!confirmRejection) {
+
+            return;
+
+        }
+
+
+        try {
+
+
+            await update(
+                ref(
+                    db,
+                    "students/" + uid
+                ),
+                {
+
+                    status:
+                        "rejected",
+
+                    enrolled:
+                        false,
+
+                    rejectedAt:
+                        Date.now(),
+
+                    rejectionDate:
+                        new Date()
+                            .toLocaleString(
+                                "en-PK"
+                            )
+
+                }
+            );
+
+
+            alert(
+                "Student rejected."
+            );
+
+
+        }
+
+        catch (error) {
+
+
+            console.error(
+                error
+            );
+
+
+            alert(
+                "Error: " +
+                error.message
+            );
+
+        }
+
+    };
