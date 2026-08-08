@@ -1,23 +1,16 @@
-// =====================================================
+// =====================================
 // STUDENT DASHBOARD
-// =====================================================
-
-
-// =====================================================
-// FIREBASE IMPORTS
-// =====================================================
+// =====================================
 
 import {
     initializeApp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
 
 import {
     getAuth,
     onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
 
 import {
     getDatabase,
@@ -26,14 +19,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
-// =====================================================
+// =====================================
 // FIREBASE CONFIG
-// =====================================================
+// =====================================
 
 const firebaseConfig = {
 
-    apiKey:
-        "AIzaSyB3FCQ0PFQaQDwdjIvvVd3shQ_EXqL3iMA",
+    apiKey: "AIzaSyB3FCQ0PFQaQDwdjIvvVd3shQ_EXqL3iMA",
 
     authDomain:
         "mawaddat-fil-qurba.firebaseapp.com",
@@ -56,492 +48,314 @@ const firebaseConfig = {
 };
 
 
-// =====================================================
-// INITIALIZE
-// =====================================================
+// =====================================
+// INITIALIZE FIREBASE
+// =====================================
 
-const app =
-    initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
+const auth = getAuth(app);
 
-const auth =
-    getAuth(app);
-
-
-const db =
-    getDatabase(app);
+const db = getDatabase(app);
 
 
-// =====================================================
-// ELEMENTS
-// =====================================================
+// =====================================
+// HTML ELEMENTS
+// =====================================
 
 const studentName =
     document.getElementById("studentName");
 
-const studentEmail =
-    document.getElementById("studentEmail");
-
 const infoName =
     document.getElementById("infoName");
 
-const infoEmail =
-    document.getElementById("infoEmail");
+const infoCourse =
+    document.getElementById("infoCourse");
 
-const infoPhone =
-    document.getElementById("infoPhone");
+const infoBatch =
+    document.getElementById("infoBatch");
 
-const infoWhatsapp =
-    document.getElementById("infoWhatsapp");
+const infoStatus =
+    document.getElementById("infoStatus");
 
-const infoAge =
-    document.getElementById("infoAge");
+const courseTitle =
+    document.getElementById("courseTitle");
 
-const infoCity =
-    document.getElementById("infoCity");
+const courseDescription =
+    document.getElementById("courseDescription");
 
-const courseName =
-    document.getElementById("courseName");
-
-const courseStatus =
-    document.getElementById("courseStatus");
-
-const statusCard =
-    document.getElementById("statusCard");
-
-const courseActions =
-    document.getElementById("courseActions");
-
-const examBtn =
-    document.getElementById("examBtn");
+const latestUpdate =
+    document.getElementById("latestUpdate");
 
 const logoutBtn =
     document.getElementById("logoutBtn");
 
+const classesBtn =
+    document.getElementById("classesBtn");
 
-// =====================================================
-// AUTHENTICATION CHECK
-// =====================================================
+const booksBtn =
+    document.getElementById("booksBtn");
 
-onAuthStateChanged(
-    auth,
-    async (user) => {
-
-
-        // -------------------------------------------------
-        // NOT LOGGED IN
-        // -------------------------------------------------
-
-        if (!user) {
-
-            window.location.href =
-                "student-login.html";
-
-            return;
-
-        }
+const examBtn =
+    document.getElementById("examBtn");
 
 
-        // -------------------------------------------------
-        // LOAD STUDENT
-        // -------------------------------------------------
+// =====================================
+// LOAD STUDENT
+// =====================================
 
-        await loadStudent(
-            user.uid
-        );
-
-    }
-);
-
-
-// =====================================================
-// LOAD STUDENT DATA
-// =====================================================
-
-async function loadStudent(uid) {
-
+async function loadStudent(user) {
 
     try {
 
-
-        const studentRef =
-            ref(
-                db,
-                "students/" + uid
-            );
-
+        const studentsRef =
+            ref(db, "students");
 
         const snapshot =
-            await get(studentRef);
+            await get(studentsRef);
 
 
         if (!snapshot.exists()) {
 
-
-            statusCard.innerHTML = `
-
-                <h2>
-                    Student Record Not Found
-                </h2>
-
-                <p>
-                    آپ کا طالب علم ریکارڈ موجود نہیں ہے۔
-                </p>
-
-            `;
+            alert(
+                "Student record not found."
+            );
 
             return;
 
         }
 
 
-        const student =
-            snapshot.val();
+        let student = null;
 
 
-        // =================================================
-        // BASIC INFORMATION
-        // =================================================
+        snapshot.forEach((child) => {
 
-        studentName.textContent =
+            const data = child.val();
+
+
+            // Match Firebase Auth UID
+
+            if (
+                data.uid &&
+                data.uid === user.uid
+            ) {
+
+                student = {
+                    id: child.key,
+                    ...data
+                };
+
+            }
+
+        });
+
+
+        // =================================
+        // STUDENT NOT FOUND
+        // =================================
+
+        if (!student) {
+
+            alert(
+                "Your student account is not linked with the student database."
+            );
+
+            return;
+
+        }
+
+
+        // =================================
+        // DISPLAY INFORMATION
+        // =================================
+
+        const name =
             student.name || "Student";
 
+        const course =
+            student.course || "Not Assigned";
 
-        studentEmail.textContent =
-            student.email || "-";
-
-
-        infoName.textContent =
-            student.name || "-";
-
-
-        infoEmail.textContent =
-            student.email || "-";
-
-
-        infoPhone.textContent =
-            student.phone || "-";
-
-
-        infoWhatsapp.textContent =
-            student.whatsapp || "-";
-
-
-        infoAge.textContent =
-            student.age || "-";
-
-
-        infoCity.textContent =
-            student.city || "-";
-
-
-        courseName.textContent =
-            student.course || "-";
-
-
-        // =================================================
-        // CHECK APPROVAL
-        // =================================================
+        const batch =
+            student.batch || "2026";
 
         const status =
             student.status || "pending";
 
 
-        const enrolled =
-            student.enrolled === true;
+        studentName.innerText =
+            name;
+
+        infoName.innerText =
+            name;
+
+        infoCourse.innerText =
+            course;
+
+        infoBatch.innerText =
+            batch;
+
+        infoStatus.innerText =
+            status;
 
 
-        // =================================================
-        // PENDING
-        // =================================================
+        courseTitle.innerText =
+            course;
+
+
+        courseDescription.innerText =
+            "You are enrolled in " +
+            course +
+            ". Your classes and learning material will appear here.";
+
+
+        latestUpdate.innerText =
+            "Current Session: " +
+            course;
+
+
+        // =================================
+        // STATUS
+        // =================================
 
         if (
-            status === "pending" ||
-            enrolled === false
+            status.toLowerCase() !==
+            "active"
         ) {
 
-
-            statusCard.className =
-                "status-card pending";
-
-
-            statusCard.innerHTML = `
-
-                <div style="font-size:38px;">
-                    ⏳
-                </div>
-
-                <h2 style="color:#8a6d1d;">
-                    منظوری کا انتظار
-                </h2>
-
-                <p style="margin-top:8px;color:#777;">
-                    آپ کی درخواست کامیابی سے موصول ہو گئی ہے۔
-                    منتظمین آپ کی درخواست کا جائزہ لے رہے ہیں۔
-                </p>
-
-            `;
+            infoStatus.style.color =
+                "orange";
 
 
-            courseStatus.textContent =
-                "Approval Pending";
-
-
-            courseStatus.style.background =
-                "#fff1bd";
-
-
-            courseStatus.style.color =
-                "#80661b";
-
-
-            courseActions.innerHTML = `
-
-                <p style="color:#777;">
-                    منظوری کے بعد آپ کے کورس کی کلاسز
-                    یہاں ظاہر ہوں گی۔
-                </p>
-
-            `;
-
-
-            examBtn.disabled =
+            classesBtn.disabled =
                 true;
 
-
-            examBtn.style.opacity =
-                "0.5";
-
-
-            return;
+            booksBtn.disabled =
+                true;
 
         }
 
 
-        // =================================================
-        // APPROVED
-        // =================================================
+        // =================================
+        // SAVE COURSE LOCALLY
+        // =================================
 
-        if (
-            status === "approved" &&
-            enrolled === true
-        ) {
+        localStorage.setItem(
+            "studentName",
+            name
+        );
 
+        localStorage.setItem(
+            "studentCourse",
+            course
+        );
 
-            statusCard.className =
-                "status-card approved";
-
-
-            statusCard.innerHTML = `
-
-                <div style="font-size:38px;">
-                    ✅
-                </div>
-
-                <h2 style="color:#23704f;">
-                    آپ کا داخلہ منظور ہو گیا ہے
-                </h2>
-
-                <p style="margin-top:8px;color:#777;">
-                    اب آپ اپنے کورس کی کلاسز اور
-                    تعلیمی مواد تک رسائی حاصل کر سکتے ہیں۔
-                </p>
-
-            `;
+        localStorage.setItem(
+            "studentBatch",
+            batch
+        );
 
 
-            courseStatus.textContent =
-                "Enrolled";
+        // =================================
+        // COURSE BUTTONS
+        // =================================
+
+        classesBtn.addEventListener(
+            "click",
+            () => {
+
+                window.location.href =
+                    "classes.html";
+
+            }
+        );
 
 
-            courseStatus.style.background =
-                "#dff3e8";
+        booksBtn.addEventListener(
+            "click",
+            () => {
+
+                window.location.href =
+                    "course-books.html";
+
+            }
+        );
 
 
-            courseStatus.style.color =
-                "#23704f";
+        examBtn.addEventListener(
+            "click",
+            () => {
 
+                window.location.href =
+                    "exam.html";
 
-            courseActions.innerHTML = `
-
-                <button
-                    class="primary-btn"
-                    id="classesBtn">
-
-                    📚 Classes
-
-                </button>
-
-
-                <button
-                    class="secondary-btn"
-                    id="booksBtn">
-
-                    📖 Course Book
-
-                </button>
-
-
-            `;
-
-
-            // -------------------------------------------------
-            // CLASSES
-            // -------------------------------------------------
-
-            document
-                .getElementById("classesBtn")
-                .addEventListener(
-                    "click",
-                    () => {
-
-                        window.location.href =
-                            "course-classes.html";
-
-                    }
-                );
-
-
-            // -------------------------------------------------
-            // BOOK
-            // -------------------------------------------------
-
-            document
-                .getElementById("booksBtn")
-                .addEventListener(
-                    "click",
-                    () => {
-
-                        window.location.href =
-                            "course-book.html";
-
-                    }
-                );
-
-
-            // -------------------------------------------------
-            // EXAM
-            // -------------------------------------------------
-
-            examBtn.disabled =
-                false;
-
-
-            examBtn.style.opacity =
-                "1";
-
-
-            return;
-
-        }
-
-
-        // =================================================
-        // OTHER STATUS
-        // =================================================
-
-        statusCard.innerHTML = `
-
-            <div style="font-size:38px;">
-                ℹ️
-            </div>
-
-            <h2>
-                Account Status
-            </h2>
-
-            <p>
-                Status: ${status}
-            </p>
-
-        `;
-
+            }
+        );
 
     }
 
     catch (error) {
 
+        console.error(error);
 
-        console.error(
-            "Student Loading Error:",
-            error
+        alert(
+            "Error loading student data."
         );
-
-
-        statusCard.innerHTML = `
-
-            <h2>
-                معلومات حاصل نہیں ہو سکیں
-            </h2>
-
-            <p>
-                براہِ کرم دوبارہ کوشش کریں۔
-            </p>
-
-        `;
 
     }
 
 }
 
 
-// =====================================================
-// EXAM BUTTON
-// =====================================================
+// =====================================
+// AUTH CHECK
+// =====================================
 
-examBtn.addEventListener(
-    "click",
-    () => {
+onAuthStateChanged(
+    auth,
+    (user) => {
 
-        window.location.href =
-            "exam.html";
+        if (!user) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        loadStudent(user);
 
     }
 );
 
 
-// =====================================================
+// =====================================
 // LOGOUT
-// =====================================================
+// =====================================
 
 logoutBtn.addEventListener(
     "click",
     async () => {
 
-
         try {
-
 
             await signOut(auth);
 
-
-            localStorage.removeItem(
-                "studentName"
-            );
-
-
-            localStorage.removeItem(
-                "studentUID"
-            );
-
+            localStorage.clear();
 
             window.location.href =
-                "student-login.html";
-
+                "login.html";
 
         }
 
         catch (error) {
 
-
-            console.error(
-                "Logout Error:",
-                error
-            );
-
+            console.error(error);
 
             alert(
-                "Logout failed. Please try again."
+                "Logout failed."
             );
 
         }
