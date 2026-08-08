@@ -1,26 +1,24 @@
-// =====================================================
-// UNIVERSAL LOGIN
-// =====================================================
+// =====================================
+// FIREBASE LOGIN
+// =====================================
 
 import {
     initializeApp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-
 import {
-    getDatabase,
-    ref,
-    get
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    getAuth,
+    signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// =====================================================
+
+// =====================================
 // FIREBASE CONFIG
-// =====================================================
+// =====================================
 
 const firebaseConfig = {
 
-    apiKey:
-        "AIzaSyB3FCQ0PFQaQDwdjIvvVd3shQ_EXqL3iMA",
+    apiKey: "AIzaSyB3FCQ0PFQaQDwdjIvvVd3shQ_EXqL3iMA",
 
     authDomain:
         "mawaddat-fil-qurba.firebaseapp.com",
@@ -43,22 +41,18 @@ const firebaseConfig = {
 };
 
 
-// =====================================================
-// INITIALIZE
-// =====================================================
+// =====================================
+// INITIALIZE FIREBASE
+// =====================================
 
-const app =
-    initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-const auth =
-    getAuth(app);
+const auth = getAuth(app);
 
-const db =
-    getDatabase(app);
 
-// =====================================================
-// ELEMENTS
-// =====================================================
+// =====================================
+// HTML ELEMENTS
+// =====================================
 
 const loginForm =
     document.getElementById("loginForm");
@@ -69,451 +63,115 @@ const emailInput =
 const passwordInput =
     document.getElementById("password");
 
-const loginBtn =
-    document.getElementById("loginBtn");
-
-const message =
-    document.getElementById("message");
-
-const studentMode =
-    document.getElementById("studentMode");
-
-const adminMode =
-    document.getElementById("adminMode");
-
-const forgotPassword =
-    document.getElementById("forgotPassword");
-
-const studentLinks =
-    document.getElementById("studentLinks");
+const loginMessage =
+    document.getElementById("loginMessage");
 
 
-// =====================================================
-// CURRENT LOGIN MODE
-// =====================================================
+// =====================================
+// ADMIN UID
+// =====================================
 
-let loginMode = "student";
-
-
-// =====================================================
-// STUDENT MODE
-// =====================================================
-
-studentMode.addEventListener(
-    "click",
-    () => {
-
-        loginMode = "student";
+const ADMIN_UID =
+    "OE0IbtLPAoX9ajtlZtSorC6U3o33";
 
 
-        studentMode.classList.add(
-            "active"
-        );
+// =====================================
+// LOGIN
+// =====================================
 
-        adminMode.classList.remove(
-            "active"
-        );
+loginForm.addEventListener("submit", async (event) => {
 
-
-        loginBtn.textContent =
-            "Student Login";
+    event.preventDefault();
 
 
-        studentLinks.style.display =
-            "block";
+    const email =
+        emailInput.value.trim();
+
+    const password =
+        passwordInput.value;
 
 
-        clearMessage();
+    loginMessage.innerHTML =
+        "⏳ Logging in...";
 
-    }
-);
-
-// =================================================
-// ADMIN LOGIN
-// =================================================
-
-if (
-    loginMode === "admin"
-) {
 
     try {
 
-        // Admin UID چیک کریں
-        const adminRef =
-            ref(
-                db,
-                "admins/" + user.uid
+        const userCredential =
+            await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
             );
 
-        const adminSnapshot =
-            await get(adminRef);
+
+        const user =
+            userCredential.user;
 
 
-        // اگر یہ UID Admin نہیں ہے
-        if (
-            !adminSnapshot.exists() ||
-            adminSnapshot.val().role !== "admin"
-        ) {
-
-            await auth.signOut();
-
-            showError(
-                "یہ اکاؤنٹ Admin نہیں ہے۔"
-            );
-
-            loginBtn.disabled =
-                false;
-
-            loginBtn.textContent =
-                "Admin Login";
-
-            return;
-
-        }
-
-
-        // =================================================
-        // ADMIN VERIFIED
-        // =================================================
-
-        localStorage.setItem(
-            "adminLoggedIn",
-            "true"
-        );
-
-
-        localStorage.setItem(
-            "adminUID",
+        console.log(
+            "Logged in UID:",
             user.uid
         );
 
 
-        showSuccess(
-            "Admin Login کامیاب۔ Admin Panel کھولا جا رہا ہے..."
-        );
+        // =================================
+        // ADMIN
+        // =================================
 
+        if (user.uid === ADMIN_UID) {
 
-        setTimeout(
-            () => {
+            loginMessage.innerHTML =
+                "✅ Admin Login Successful";
+
+            setTimeout(() => {
 
                 window.location.href =
-                    "../admin.html";
+                    "../admin/admin.html";
 
-            },
-            700
-        );
+            }, 800);
+
+            return;
+        }
+
+
+        // =================================
+        // STUDENT
+        // =================================
+
+        loginMessage.innerHTML =
+            "✅ Login Successful";
+
+
+        setTimeout(() => {
+
+            window.location.href =
+                "student-dashboard.html";
+
+        }, 800);
+
 
     }
 
     catch (error) {
 
-        console.error(
-            "Admin Verification Error:",
-            error
-        );
+        console.error(error);
 
 
-        await auth.signOut();
+        loginMessage.innerHTML =
+            "❌ Invalid Email or Password";
 
 
-        showError(
-            "Admin verification ناکام ہو گئی۔"
-        );
+        if (
+            error.code ===
+            "auth/invalid-credential"
+        ) {
 
-
-        loginBtn.disabled =
-            false;
-
-        loginBtn.textContent =
-            "Admin Login";
-
-    }
-
-}
-
-// =====================================================
-// LOGIN
-// =====================================================
-
-loginForm.addEventListener(
-    "submit",
-    async (event) => {
-
-        event.preventDefault();
-
-
-        const email =
-            emailInput.value.trim();
-
-        const password =
-            passwordInput.value;
-
-
-        if (!email || !password) {
-
-            showError(
-                "براہِ کرم Email اور Password درج کریں۔"
-            );
-
-            return;
-
-        }
-
-
-        loginBtn.disabled =
-            true;
-
-        loginBtn.textContent =
-            "Logging in...";
-
-
-        try {
-
-
-            const userCredential =
-                await signInWithEmailAndPassword(
-                    auth,
-                    email,
-                    password
-                );
-
-
-            const user =
-                userCredential.user;
-
-
-            // =================================================
-            // STUDENT LOGIN
-            // =================================================
-
-            if (
-                loginMode ===
-                "student"
-            ) {
-
-
-                localStorage.setItem(
-                    "studentUID",
-                    user.uid
-                );
-
-
-                localStorage.setItem(
-                    "studentEmail",
-                    user.email
-                );
-
-
-                showSuccess(
-                    "Login کامیاب۔ Dashboard کھولا جا رہا ہے..."
-                );
-
-
-                setTimeout(
-                    () => {
-
-                        window.location.href =
-                            "student-dashboard.html";
-
-                    },
-                    700
-                );
-
-
-                return;
-
-            }
-
-
-            // =================================================
-            // ADMIN LOGIN
-            // =================================================
-
-            if (
-                loginMode ===
-                "admin"
-            ) {
-
-
-                showSuccess(
-                    "Admin Login کامیاب۔ Admin Panel کھولا جا رہا ہے..."
-                );
-
-
-                setTimeout(
-                    () => {
-
-                        window.location.href =
-                            "../admin.html";
-
-                    },
-                    700
-                );
-
-
-            }
-
-        }
-
-
-        catch (error) {
-
-
-            console.error(
-                "Login Error:",
-                error
-            );
-
-
-            loginBtn.disabled =
-                false;
-
-
-            loginBtn.textContent =
-                loginMode === "admin"
-                    ? "Admin Login"
-                    : "Student Login";
-
-
-            if (
-                error.code ===
-                "auth/invalid-credential"
-            ) {
-
-                showError(
-                    "Email یا Password درست نہیں ہے۔"
-                );
-
-            }
-
-            else if (
-                error.code ===
-                "auth/user-disabled"
-            ) {
-
-                showError(
-                    "یہ اکاؤنٹ غیر فعال کر دیا گیا ہے۔"
-                );
-
-            }
-
-            else if (
-                error.code ===
-                "auth/invalid-email"
-            ) {
-
-                showError(
-                    "براہِ کرم درست Email درج کریں۔"
-                );
-
-            }
-
-            else {
-
-                showError(
-                    "Login نہیں ہو سکا۔ دوبارہ کوشش کریں۔"
-                );
-
-            }
+            loginMessage.innerHTML =
+                "❌ Email or Password is incorrect.";
 
         }
 
     }
-);
 
-
-// =====================================================
-// FORGOT PASSWORD
-// =====================================================
-
-forgotPassword.addEventListener(
-    "click",
-    async () => {
-
-
-        const email =
-            emailInput.value.trim();
-
-
-        if (!email) {
-
-            showError(
-                "پہلے Email Address درج کریں۔"
-            );
-
-            emailInput.focus();
-
-            return;
-
-        }
-
-
-        try {
-
-
-            await sendPasswordResetEmail(
-                auth,
-                email
-            );
-
-
-            showSuccess(
-                "Password Reset Email بھیج دی گئی ہے۔ اپنا Email Inbox چیک کریں۔"
-            );
-
-
-        }
-
-        catch (error) {
-
-
-            console.error(
-                error
-            );
-
-
-            showError(
-                "Password Reset Email نہیں بھیجی جا سکی۔ Email چیک کریں۔"
-            );
-
-        }
-
-    }
-);
-
-
-// =====================================================
-// MESSAGE FUNCTIONS
-// =====================================================
-
-function showError(text) {
-
-    message.textContent =
-        text;
-
-    message.className =
-        "message error";
-
-}
-
-
-function showSuccess(text) {
-
-    message.textContent =
-        text;
-
-    message.className =
-        "message success";
-
-}
-
-
-function clearMessage() {
-
-    message.textContent =
-        "";
-
-    message.className =
-        "message";
-
-}
+});
