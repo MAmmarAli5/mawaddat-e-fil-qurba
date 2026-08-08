@@ -53,6 +53,8 @@ const app =
 const auth =
     getAuth(app);
 
+const db =
+    getDatabase(app);
 
 // =====================================================
 // ELEMENTS
@@ -126,40 +128,108 @@ studentMode.addEventListener(
     }
 );
 
+// =================================================
+// ADMIN LOGIN
+// =================================================
 
-// =====================================================
-// ADMIN MODE
-// =====================================================
+if (
+    loginMode === "admin"
+) {
 
-adminMode.addEventListener(
-    "click",
-    () => {
+    try {
 
-        loginMode = "admin";
+        // Admin UID چیک کریں
+        const adminRef =
+            ref(
+                db,
+                "admins/" + user.uid
+            );
+
+        const adminSnapshot =
+            await get(adminRef);
 
 
-        adminMode.classList.add(
-            "active"
+        // اگر یہ UID Admin نہیں ہے
+        if (
+            !adminSnapshot.exists() ||
+            adminSnapshot.val().role !== "admin"
+        ) {
+
+            await auth.signOut();
+
+            showError(
+                "یہ اکاؤنٹ Admin نہیں ہے۔"
+            );
+
+            loginBtn.disabled =
+                false;
+
+            loginBtn.textContent =
+                "Admin Login";
+
+            return;
+
+        }
+
+
+        // =================================================
+        // ADMIN VERIFIED
+        // =================================================
+
+        localStorage.setItem(
+            "adminLoggedIn",
+            "true"
         );
 
-        studentMode.classList.remove(
-            "active"
+
+        localStorage.setItem(
+            "adminUID",
+            user.uid
         );
 
+
+        showSuccess(
+            "Admin Login کامیاب۔ Admin Panel کھولا جا رہا ہے..."
+        );
+
+
+        setTimeout(
+            () => {
+
+                window.location.href =
+                    "../admin.html";
+
+            },
+            700
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Admin Verification Error:",
+            error
+        );
+
+
+        await auth.signOut();
+
+
+        showError(
+            "Admin verification ناکام ہو گئی۔"
+        );
+
+
+        loginBtn.disabled =
+            false;
 
         loginBtn.textContent =
             "Admin Login";
 
-
-        studentLinks.style.display =
-            "none";
-
-
-        clearMessage();
-
     }
-);
 
+}
 
 // =====================================================
 // LOGIN
