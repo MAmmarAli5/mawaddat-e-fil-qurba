@@ -1,78 +1,39 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl">
+<html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-    <title>
-        Login | Mawaddat-e-Fil-Qurba
-    </title>
+<title>Login | Mawaddat-e-Fil-Qurba</title>
 
-    <link rel="stylesheet"
-          href="../css/auth.css">
+<link rel="stylesheet" href="../css/style.css">
 
 </head>
 
-
 <body>
 
+<div class="login-page">
 
-<div class="auth-page">
-
-
-    <div class="auth-card">
-
-
-        <div class="auth-logo">
-
-            <img src="../images/logo.png"
-                 alt="Mawaddat-e-Fil-Qurba">
-
-        </div>
-
+    <div class="login-box">
 
         <h1>
-            Login
+            Mawaddat-e-Fil-Qurba
         </h1>
 
+        <h2>
+            Login
+        </h2>
 
-        <p class="auth-subtitle">
-            Mawaddat-e-Fil-Qurba Online Learning Platform
+        <p>
+            Login to continue your learning journey
         </p>
 
 
-        <!-- LOGIN TYPE -->
-
-        <div class="login-type">
-
-            <button
-                type="button"
-                id="studentMode"
-                class="mode-btn active">
-
-                🎓 Student Login
-
-            </button>
-
-
-            <button
-                type="button"
-                id="adminMode"
-                class="mode-btn">
-
-                🔐 Admin Login
-
-            </button>
-
-        </div>
-
-
         <form id="loginForm">
-
 
             <label>
                 Email Address
@@ -98,71 +59,30 @@
             >
 
 
-            <button
-                type="submit"
-                class="auth-btn"
-                id="loginBtn">
-
-                Student Login
-
+            <button type="submit">
+                Login
             </button>
-
 
         </form>
 
 
-        <button
-            type="button"
-            id="forgotPassword"
-            class="forgot-btn">
-
-            Forgot Password?
-
-        </button>
+        <p id="loginMessage"></p>
 
 
-        <div id="message"
-             class="message">
-        </div>
+        <div class="login-links">
 
-
-        <div id="studentLinks">
-
-
-            <p style="margin-top:20px;">
-                New Student?
-            </p>
-
-
-            <a href="student-register.html"
-               class="register-btn">
-
-                Create Student Account
-
+            <a href="../index.html">
+                ← Back to Home
             </a>
 
         </div>
 
-
-        <a href="../index.html"
-           class="back-home">
-
-            ← Back to Home
-
-        </a>
-
-
     </div>
-
 
 </div>
 
 
-
-<script type="module"
-        src="../js/login.js">
-</script>
-
+<script type="module" src="../js/login.js"></script>
 
 </body>
 
