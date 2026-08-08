@@ -1,10 +1,16 @@
 // =====================================
-// ENROLLMENT FORM
+// STUDENT ENROLLMENT
 // =====================================
 
 import {
     initializeApp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
     getDatabase,
@@ -40,23 +46,25 @@ const firebaseConfig = {
 
     appId:
         "1:637175775327:web:95da7d655c7606f5ef9bea"
-
 };
 
 
 // =====================================
-// INITIALIZE
+// INITIALIZE FIREBASE
 // =====================================
 
 const app =
     initializeApp(firebaseConfig);
+
+const auth =
+    getAuth(app);
 
 const db =
     getDatabase(app);
 
 
 // =====================================
-// ELEMENTS
+// HTML ELEMENTS
 // =====================================
 
 const form =
@@ -67,7 +75,7 @@ const message =
 
 
 // =====================================
-// SUBMIT
+// SUBMIT ENROLLMENT
 // =====================================
 
 form.addEventListener(
@@ -81,31 +89,29 @@ form.addEventListener(
             document.getElementById("name")
             .value.trim();
 
-
         const email =
             document.getElementById("email")
             .value.trim();
 
+        const password =
+            document.getElementById("password")
+            .value;
 
         const phone =
             document.getElementById("phone")
             .value.trim();
 
-
         const whatsapp =
             document.getElementById("whatsapp")
             .value.trim();
-
 
         const age =
             document.getElementById("age")
             .value;
 
-
         const city =
             document.getElementById("city")
             .value.trim();
-
 
         const course =
             document.getElementById("course")
@@ -113,23 +119,53 @@ form.addEventListener(
 
 
         message.innerHTML =
-            "⏳ Submitting your application...";
+            "⏳ آپ کی درخواست جمع کی جا رہی ہے...";
 
 
         try {
 
+            // =================================
+            // CREATE FIREBASE ACCOUNT
+            // =================================
 
-            const studentsRef =
+            const userCredential =
+                await createUserWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
+
+
+            const user =
+                userCredential.user;
+
+
+            const uid =
+                user.uid;
+
+
+            console.log(
+                "Student UID:",
+                uid
+            );
+
+
+            // =================================
+            // SAVE ENROLLMENT
+            // =================================
+
+            const enrollmentsRef =
                 ref(db, "enrollments");
 
-
-            const newStudent =
-                push(studentsRef);
+            const newEnrollment =
+                push(enrollmentsRef);
 
 
             await set(
-                newStudent,
+                newEnrollment,
                 {
+
+                    uid: uid,
 
                     name: name,
 
@@ -156,25 +192,41 @@ form.addEventListener(
             );
 
 
+            // =================================
+            // SIGN OUT AFTER REGISTRATION
+            // =================================
+
+            await signOut(auth);
+
+
+            // =================================
+            // SUCCESS MESSAGE
+            // =================================
+
             message.innerHTML = `
 
                 <div class="success-message">
 
                     <h3>
-                        ✅ Application Submitted
+                        ✅ درخواست کامیابی سے جمع ہوگئی
                     </h3>
 
                     <p>
-                        Thank you, ${name}.
+                        محترم ${name}
                     </p>
 
                     <p>
-                        Your enrollment request has been
-                        submitted successfully.
+                        آپ کا طالب علم اکاؤنٹ بن گیا ہے۔
                     </p>
 
                     <p>
-                        Admin approval is required.
+                        آپ کی درخواست فی الحال
+                        Admin کی منظوری کے انتظار میں ہے۔
+                    </p>
+
+                    <p>
+                        منظوری کے بعد آپ اپنے Email اور Password
+                        کے ذریعے Login کر سکیں گے۔
                     </p>
 
                 </div>
@@ -184,7 +236,6 @@ form.addEventListener(
 
             form.reset();
 
-
         }
 
         catch (error) {
@@ -192,15 +243,42 @@ form.addEventListener(
             console.error(error);
 
 
-            message.innerHTML = `
+            if (
+                error.code ===
+                "auth/email-already-in-use"
+            ) {
 
-                <div class="error-message">
+                message.innerHTML =
+                    "❌ یہ Email پہلے سے رجسٹرڈ ہے۔";
 
-                    ❌ Something went wrong.
+            }
 
-                </div>
+            else if (
+                error.code ===
+                "auth/weak-password"
+            ) {
 
-            `;
+                message.innerHTML =
+                    "❌ Password کم از کم 6 حروف کا ہونا چاہیے۔";
+
+            }
+
+            else if (
+                error.code ===
+                "auth/invalid-email"
+            ) {
+
+                message.innerHTML =
+                    "❌ Email درست نہیں ہے۔";
+
+            }
+
+            else {
+
+                message.innerHTML =
+                    "❌ درخواست جمع نہیں ہوسکی۔ دوبارہ کوشش کریں۔";
+
+            }
 
         }
 
