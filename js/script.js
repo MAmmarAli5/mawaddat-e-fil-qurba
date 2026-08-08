@@ -474,8 +474,7 @@ async function loadQuestions() {
     try {
 
         const snapshot =
-            await get(
-                ref(db, "questions")
+            awaitget(ref(db, "Questions"))
             );
 
 
