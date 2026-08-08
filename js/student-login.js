@@ -1,311 +1,190 @@
-// =====================================================
+// ========================================
+// FIREBASE AUTHENTICATION
 // STUDENT LOGIN
-// =====================================================
+// ========================================
 
-
-// =====================================================
-// FIREBASE IMPORTS
-// =====================================================
-
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
     getAuth,
-    signInWithEmailAndPassword,
-    sendPasswordResetEmail
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    signInWithEmailAndPassword
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
-// =====================================================
+// ========================================
 // FIREBASE CONFIG
-// =====================================================
+// ========================================
 
 const firebaseConfig = {
 
-    apiKey:
-        "AIzaSyB3FCQ0PFQaQDwdjIvvVd3shQ_EXqL3iMA",
+    apiKey: "AIzaSyB3FCQ0PFQaQDwdjIvvVd3shQ_EXqL3iMA",
 
-    authDomain:
-        "mawaddat-fil-qurba.firebaseapp.com",
+    authDomain: "mawaddat-fil-qurba.firebaseapp.com",
 
     databaseURL:
-        "https://mawaddat-fil-qurba-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "https://mawaddat-fil-qurba-default-rtdb.asia-southeast1.firebasedatabase.app",
 
-    projectId:
-        "mawaddat-fil-qurba",
+    projectId: "mawaddat-fil-qurba",
 
     storageBucket:
-        "mawaddat-fil-qurba.firebasestorage.app",
+    "mawaddat-fil-qurba.firebasestorage.app",
 
-    messagingSenderId:
-        "637175775327",
+    messagingSenderId: "637175775327",
 
     appId:
-        "1:637175775327:web:95da7d655c7606f5ef9bea"
+    "1:637175775327:web:95da7d655c7606f5ef9bea"
 
 };
 
 
-// =====================================================
-// FIREBASE INITIALIZATION
-// =====================================================
+// ========================================
+// INITIALIZE FIREBASE
+// ========================================
 
-const app =
-    initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-const auth =
-    getAuth(app);
+const auth = getAuth(app);
 
 
-// =====================================================
+// ========================================
 // HTML ELEMENTS
-// =====================================================
+// ========================================
 
 const loginForm =
-    document.getElementById(
-        "studentLoginForm"
-    );
-
+    document.getElementById("loginForm");
 
 const emailInput =
-    document.getElementById(
-        "email"
-    );
-
+    document.getElementById("email");
 
 const passwordInput =
-    document.getElementById(
-        "password"
-    );
+    document.getElementById("password");
 
+const loginBtn =
+    document.getElementById("loginBtn");
 
 const message =
-    document.getElementById(
-        "message"
-    );
+    document.getElementById("message");
 
 
-const forgotPassword =
-    document.getElementById(
-        "forgotPassword"
-    );
-
-
-// =====================================================
+// ========================================
 // STUDENT LOGIN
-// =====================================================
+// ========================================
 
-loginForm.addEventListener(
-    "submit",
-    async (event) => {
+loginForm.addEventListener("submit", async (event) => {
 
-        event.preventDefault();
+    event.preventDefault();
 
+    const email =
+        emailInput.value.trim();
 
-        const email =
-            emailInput.value.trim();
+    const password =
+        passwordInput.value;
 
+    if (!email || !password) {
 
-        const password =
-            passwordInput.value;
+        message.style.color = "red";
 
+        message.innerText =
+            "Email اور Password درج کریں۔";
 
-        if (!email || !password) {
-
-            message.textContent =
-                "Please enter your email and password.";
-
-            message.className =
-                "message error";
-
-            return;
-
-        }
-
-
-        message.textContent =
-            "Logging in...";
-
-
-        message.className =
-            "message";
-
-
-        try {
-
-
-            const userCredential =
-                await signInWithEmailAndPassword(
-                    auth,
-                    email,
-                    password
-                );
-
-
-            const user =
-                userCredential.user;
-
-
-            console.log(
-                "Student logged in:",
-                user.uid
-            );
-
-
-            message.textContent =
-                "Login successful!";
-
-
-            message.className =
-                "message success";
-
-
-            /*
-             * اگر طالب علم نے Online Exam
-             * کے بٹن سے login کیا ہے
-             * تو اسے Exam پر بھیجیں۔
-             */
-
-            const params =
-                new URLSearchParams(
-                    window.location.search
-                );
-
-
-            const redirect =
-                params.get("redirect");
-
-
-            if (redirect === "exam") {
-
-                window.location.href =
-                    "exam.html";
-
-            }
-
-            else {
-
-                window.location.href =
-                    "student-dashboard.html";
-
-            }
-
-
-        }
-
-        catch (error) {
-
-
-            console.error(
-                "Login Error:",
-                error
-            );
-
-
-            message.className =
-                "message error";
-
-
-            if (
-                error.code ===
-                "auth/invalid-credential"
-            ) {
-
-                message.textContent =
-                    "Email or password is incorrect.";
-
-            }
-
-            else if (
-                error.code ===
-                "auth/invalid-email"
-            ) {
-
-                message.textContent =
-                    "Please enter a valid email address.";
-
-            }
-
-            else {
-
-                message.textContent =
-                    "Unable to login. Please try again.";
-
-            }
-
-        }
-
+        return;
     }
-);
 
 
-// =====================================================
-// FORGOT PASSWORD
-// =====================================================
+    loginBtn.disabled = true;
 
-forgotPassword.addEventListener(
-    "click",
-    async (event) => {
-
-        event.preventDefault();
+    loginBtn.innerText =
+        "Login ہو رہا ہے...";
 
 
-        const email =
-            emailInput.value.trim();
+    try {
 
-
-        if (!email) {
-
-            message.textContent =
-                "Please enter your email address first.";
-
-            message.className =
-                "message error";
-
-            emailInput.focus();
-
-            return;
-
-        }
-
-
-        try {
-
-
-            await sendPasswordResetEmail(
+        const userCredential =
+            await signInWithEmailAndPassword(
                 auth,
-                email
+                email,
+                password
             );
 
 
-            message.textContent =
-                "Password reset email has been sent. Please check your inbox.";
-
-            message.className =
-                "message success";
+        const user =
+            userCredential.user;
 
 
-        }
-
-        catch (error) {
-
-
-            console.error(
-                "Password Reset Error:",
-                error
-            );
+        console.log(
+            "Student Login Successful:",
+            user.uid
+        );
 
 
-            message.textContent =
-                "Unable to send password reset email.";
+        message.style.color =
+            "green";
 
-            message.className =
-                "message error";
+        message.innerText =
+            "Login کامیاب ہوگیا۔";
 
-        }
+
+        // =================================
+        // TEMPORARY DASHBOARD REDIRECT
+        // =================================
+
+        setTimeout(() => {
+
+            window.location.href =
+                "student-dashboard.html";
+
+        }, 1000);
+
 
     }
-);
+
+    catch (error) {
+
+        console.error(error);
+
+        message.style.color =
+            "red";
+
+
+        if (error.code ===
+            "auth/invalid-credential") {
+
+            message.innerText =
+                "Email یا Password غلط ہے۔";
+
+        }
+
+        else if (error.code ===
+            "auth/user-not-found") {
+
+            message.innerText =
+                "یہ Email موجود نہیں ہے۔";
+
+        }
+
+        else if (error.code ===
+            "auth/wrong-password") {
+
+            message.innerText =
+                "Password غلط ہے۔";
+
+        }
+
+        else {
+
+            message.innerText =
+                "Login میں مسئلہ آیا۔ دوبارہ کوشش کریں۔";
+
+        }
+
+
+        loginBtn.disabled = false;
+
+        loginBtn.innerText =
+            "Login";
+
+    }
+
+});
