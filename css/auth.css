@@ -305,3 +305,25 @@ body {
     }
 
 }
+select {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid #d2ddd6;
+    border-radius: 9px;
+    font-size: 15px;
+    background: white;
+    color: #34463e;
+    outline: none;
+    cursor: pointer;
+}
+
+select:focus {
+    border-color: #174c3c;
+    box-shadow: 0 0 0 3px rgba(23,76,60,0.08);
+}
+
+.auth-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
